@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{486DB8E5-346E-409A-9991-31C6BAD29203}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScrumApplication.Entity</RootNamespace>
+    <AssemblyName>ScrumApplication.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DbContext\ScrumApplicationDbContext.cs" />
+    <Compile Include="Helpers\SHA1.cs" />
+    <Compile Include="Migrations\201807180837253_InitialMigration.cs" />
+    <Compile Include="Migrations\201807180837253_InitialMigration.Designer.cs">
+      <DependentUpon>201807180837253_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807181216475_SecondMigratio.cs" />
+    <Compile Include="Migrations\201807181216475_SecondMigratio.Designer.cs">
+      <DependentUpon>201807181216475_SecondMigratio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807181310265_ThirdMigration.cs" />
+    <Compile Include="Migrations\201807181310265_ThirdMigration.Designer.cs">
+      <DependentUpon>201807181310265_ThirdMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807181313558_FourthMigration.cs" />
+    <Compile Include="Migrations\201807181313558_FourthMigration.Designer.cs">
+      <DependentUpon>201807181313558_FourthMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807201405296_FifthMigration.cs" />
+    <Compile Include="Migrations\201807201405296_FifthMigration.Designer.cs">
+      <DependentUpon>201807201405296_FifthMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807201407323_sixth-migration.cs" />
+    <Compile Include="Migrations\201807201407323_sixth-migration.Designer.cs">
+      <DependentUpon>201807201407323_sixth-migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807201530555_SeventhMigration.cs" />
+    <Compile Include="Migrations\201807201530555_SeventhMigration.Designer.cs">
+      <DependentUpon>201807201530555_SeventhMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807201720388_NineMigration.cs" />
+    <Compile Include="Migrations\201807201720388_NineMigration.Designer.cs">
+      <DependentUpon>201807201720388_NineMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807201804375_MigrationTen.cs" />
+    <Compile Include="Migrations\201807201804375_MigrationTen.Designer.cs">
+      <DependentUpon>201807201804375_MigrationTen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807201833529_MigrationEleven.cs" />
+    <Compile Include="Migrations\201807201833529_MigrationEleven.Designer.cs">
+      <DependentUpon>201807201833529_MigrationEleven.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807210920149_MigrationTwelve.cs" />
+    <Compile Include="Migrations\201807210920149_MigrationTwelve.Designer.cs">
+      <DependentUpon>201807210920149_MigrationTwelve.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807210922351_MigrationThirteen.cs" />
+    <Compile Include="Migrations\201807210922351_MigrationThirteen.Designer.cs">
+      <DependentUpon>201807210922351_MigrationThirteen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807211228365_MigrationFourteen.cs" />
+    <Compile Include="Migrations\201807211228365_MigrationFourteen.Designer.cs">
+      <DependentUpon>201807211228365_MigrationFourteen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807221935575_MigrationFifteen.cs" />
+    <Compile Include="Migrations\201807221935575_MigrationFifteen.Designer.cs">
+      <DependentUpon>201807221935575_MigrationFifteen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807230739498_MigrationSixteen.cs" />
+    <Compile Include="Migrations\201807230739498_MigrationSixteen.Designer.cs">
+      <DependentUpon>201807230739498_MigrationSixteen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807230809215_MigrationSeventeen.cs" />
+    <Compile Include="Migrations\201807230809215_MigrationSeventeen.Designer.cs">
+      <DependentUpon>201807230809215_MigrationSeventeen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807230854080_MigrationEighteen.cs" />
+    <Compile Include="Migrations\201807230854080_MigrationEighteen.Designer.cs">
+      <DependentUpon>201807230854080_MigrationEighteen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807231623028_MigrationNineteen.cs" />
+    <Compile Include="Migrations\201807231623028_MigrationNineteen.Designer.cs">
+      <DependentUpon>201807231623028_MigrationNineteen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807231725146_MigrationTwelve1.cs" />
+    <Compile Include="Migrations\201807231725146_MigrationTwelve1.Designer.cs">
+      <DependentUpon>201807231725146_MigrationTwelve1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807241217109_MigrationTwenty.cs" />
+    <Compile Include="Migrations\201807241217109_MigrationTwenty.Designer.cs">
+      <DependentUpon>201807241217109_MigrationTwenty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807241219171_MigrationTwentyOne.cs" />
+    <Compile Include="Migrations\201807241219171_MigrationTwentyOne.Designer.cs">
+      <DependentUpon>201807241219171_MigrationTwentyOne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807250925550_MigrationTwentyTwo.cs" />
+    <Compile Include="Migrations\201807250925550_MigrationTwentyTwo.Designer.cs">
+      <DependentUpon>201807250925550_MigrationTwentyTwo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807251314383_TwentyTwo.cs" />
+    <Compile Include="Migrations\201807251314383_TwentyTwo.Designer.cs">
+      <DependentUpon>201807251314383_TwentyTwo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261547503_MigrationTwentyFive.cs" />
+    <Compile Include="Migrations\201807261547503_MigrationTwentyFive.Designer.cs">
+      <DependentUpon>201807261547503_MigrationTwentyFive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261559056_MigrationTwentySix.cs" />
+    <Compile Include="Migrations\201807261559056_MigrationTwentySix.Designer.cs">
+      <DependentUpon>201807261559056_MigrationTwentySix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261600251_MigrationTwentySeven.cs" />
+    <Compile Include="Migrations\201807261600251_MigrationTwentySeven.Designer.cs">
+      <DependentUpon>201807261600251_MigrationTwentySeven.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261601446_MigrationTwentySeven1.cs" />
+    <Compile Include="Migrations\201807261601446_MigrationTwentySeven1.Designer.cs">
+      <DependentUpon>201807261601446_MigrationTwentySeven1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261603027_MigrationTwentyEight.cs" />
+    <Compile Include="Migrations\201807261603027_MigrationTwentyEight.Designer.cs">
+      <DependentUpon>201807261603027_MigrationTwentyEight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261607203_MigrationTwentyEight1.cs" />
+    <Compile Include="Migrations\201807261607203_MigrationTwentyEight1.Designer.cs">
+      <DependentUpon>201807261607203_MigrationTwentyEight1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807261934232_MigrationTwentyNine.cs" />
+    <Compile Include="Migrations\201807261934232_MigrationTwentyNine.Designer.cs">
+      <DependentUpon>201807261934232_MigrationTwentyNine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807271546192_MigrationTwentyNine1.cs" />
+    <Compile Include="Migrations\201807271546192_MigrationTwentyNine1.Designer.cs">
+      <DependentUpon>201807271546192_MigrationTwentyNine1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\Member.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\ProjectTask.cs" />
+    <Compile Include="Models\Manager.cs" />
+    <Compile Include="Models\Sprint.cs" />
+    <Compile Include="Models\SprintModel.cs" />
+    <Compile Include="Models\SprintTask.cs" />
+    <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201807180837253_InitialMigration.resx">
+      <DependentUpon>201807180837253_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807181216475_SecondMigratio.resx">
+      <DependentUpon>201807181216475_SecondMigratio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807181310265_ThirdMigration.resx">
+      <DependentUpon>201807181310265_ThirdMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807181313558_FourthMigration.resx">
+      <DependentUpon>201807181313558_FourthMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807201405296_FifthMigration.resx">
+      <DependentUpon>201807201405296_FifthMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807201407323_sixth-migration.resx">
+      <DependentUpon>201807201407323_sixth-migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807201530555_SeventhMigration.resx">
+      <DependentUpon>201807201530555_SeventhMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807201720388_NineMigration.resx">
+      <DependentUpon>201807201720388_NineMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807201804375_MigrationTen.resx">
+      <DependentUpon>201807201804375_MigrationTen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807201833529_MigrationEleven.resx">
+      <DependentUpon>201807201833529_MigrationEleven.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807210920149_MigrationTwelve.resx">
+      <DependentUpon>201807210920149_MigrationTwelve.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807210922351_MigrationThirteen.resx">
+      <DependentUpon>201807210922351_MigrationThirteen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807211228365_MigrationFourteen.resx">
+      <DependentUpon>201807211228365_MigrationFourteen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807221935575_MigrationFifteen.resx">
+      <DependentUpon>201807221935575_MigrationFifteen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807230739498_MigrationSixteen.resx">
+      <DependentUpon>201807230739498_MigrationSixteen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807230809215_MigrationSeventeen.resx">
+      <DependentUpon>201807230809215_MigrationSeventeen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807230854080_MigrationEighteen.resx">
+      <DependentUpon>201807230854080_MigrationEighteen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807231623028_MigrationNineteen.resx">
+      <DependentUpon>201807231623028_MigrationNineteen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807231725146_MigrationTwelve1.resx">
+      <DependentUpon>201807231725146_MigrationTwelve1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807241217109_MigrationTwenty.resx">
+      <DependentUpon>201807241217109_MigrationTwenty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807241219171_MigrationTwentyOne.resx">
+      <DependentUpon>201807241219171_MigrationTwentyOne.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807250925550_MigrationTwentyTwo.resx">
+      <DependentUpon>201807250925550_MigrationTwentyTwo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807251314383_TwentyTwo.resx">
+      <DependentUpon>201807251314383_TwentyTwo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261547503_MigrationTwentyFive.resx">
+      <DependentUpon>201807261547503_MigrationTwentyFive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261559056_MigrationTwentySix.resx">
+      <DependentUpon>201807261559056_MigrationTwentySix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261600251_MigrationTwentySeven.resx">
+      <DependentUpon>201807261600251_MigrationTwentySeven.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261601446_MigrationTwentySeven1.resx">
+      <DependentUpon>201807261601446_MigrationTwentySeven1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261603027_MigrationTwentyEight.resx">
+      <DependentUpon>201807261603027_MigrationTwentyEight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261607203_MigrationTwentyEight1.resx">
+      <DependentUpon>201807261607203_MigrationTwentyEight1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261934232_MigrationTwentyNine.resx">
+      <DependentUpon>201807261934232_MigrationTwentyNine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807271546192_MigrationTwentyNine1.resx">
+      <DependentUpon>201807271546192_MigrationTwentyNine1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

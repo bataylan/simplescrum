@@ -1,0 +1,35 @@
+﻿@using ScrumApplication.Entity.Models;
+@model IEnumerable<Team>
+
+@{
+    ViewBag.Title = "Your Teams";
+}
+
+<h2>Your Teams</h2>
+
+<p>
+    <a href="@Url.Action("Create", "Team")" class="btn btn-default">Create Team</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "Team", new { id = item.TeamId })" class="btn btn-default">Edit</a>
+                <a href="@Url.Action("Select", "Team", new { id = item.TeamId })" class="btn btn-default">Team Projects</a>
+            </td>
+        </tr>
+    }
+
+</table>

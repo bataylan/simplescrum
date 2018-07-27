@@ -1,0 +1,79 @@
+﻿@using ScrumApplication.Entity.Models;
+@model IEnumerable<Project>
+
+@{
+    ViewBag.Title = "Projects";
+}
+
+<h2>Projects</h2>
+
+@*@if(Model.FirstOrDefault() != null)
+    {
+
+    }*@
+<p>
+    <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-default">Create Project</a>
+</p>
+
+@if (Model.FirstOrDefault().Name != null)
+{
+    <h4 style="margin-top:30px">Active Projects</h4>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>End Date</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            if (!item.IsDone)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.EndDate
+
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-default">Edit</a>
+                        <a href="@Url.Action("GoSprint", "Project", new { id = item.ProjectId })" class="btn btn-default">Project Home</a>
+                        <a href="@Url.Action("AllProjectTasks", "Project", new { id = item.ProjectId })" class="btn btn-default">Epic Tasks</a>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <h4>Completed Projects</h4>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>End Date</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            if (item.IsDone)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.EndDate
+                        @if (item.EndDate < DateTime.Now)
+                        {
+                            <span> Project expired, please check project duration</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Green", "Project", new { id = item.ProjectId })" class="btn btn-default">Mark as Uncompleted</a>
+                    </td>
+                </tr>
+            }
+
+        }
+    </table>
+}
+
+

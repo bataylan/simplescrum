@@ -1,0 +1,116 @@
+﻿@using ScrumApplication.Entity.Models
+@model SprintModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Current Sprint</h2>
+<div></div>
+
+<div class="row">
+    <div class="col-sm-8">
+        <p>
+            @*<a href="~/Sprint/CreateTask/" style="margin-top:20px" class="btn btn-default">Create Task</a>*@
+            @*<a href="~/Sprint/EditSprint/" style="margin-top:20px" class="btn btn-default">Edit Sprint</a>*@
+            <a href="@Url.Action("CreateTask", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;" class="btn btn-default">Create Task</a>
+            <a href="@Url.Action("EditSprint", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;margin-left:30px;" class="btn btn-default">Edit Sprint</a>
+            <a href="@Url.Action("EndSprint", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;" class="btn btn-default" onclick="return confirm('Are you sure to end current Sprint? New sprint will be created automatically and uncompleted tasks will be added to next sprint.');">End Sprint</a>
+        </p>
+        <table class="table">
+            <tr>
+                <th>Active Tasks</th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Priority</th>
+                <th>Point</th>
+                <th>Assigned</th>
+                <th></th>
+                <th></th>
+
+            </tr>
+            @foreach (var task in Model.SprintTasks.ToList())
+            {
+                if (!task.Done)
+                {
+            <tr>
+                <td>@task.Name</td>
+                <td>@task.Priority</td>
+                <td>@task.Point</td>
+                    @if (task.MemberId != null)
+                    {
+                        <td>@task.AssignedTo</td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a href="~/Sprint/TakeIt/@task.SprintTaskId" class="btn btn-default">Take It</a>
+                        </td>
+                    }
+                        <td>
+                            <a href="@Url.Action("Complete", "Sprint", new { id = task.SprintTaskId }, Request.Url.Scheme)" class="btn btn-default">Complete</a>
+                        </td>
+                
+            </tr>
+                }
+
+            }
+        </table>
+        <table class="table">
+            <tr>
+                <th>
+                    Completed Tasks
+                </th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Priority</th>
+                <th>Assigned</th>
+                <th>Point</th>
+            </tr>
+            @foreach (var task in Model.SprintTasks.ToList())
+            {
+                if (task.Done)
+                {
+                    <tr>
+                        <td>@task.Name</td>
+                        <td>@task.Priority</td>
+                        @if (task.AssignedTo != null)
+                        {
+                            <td>@task.AssignedTo</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td>@task.Point</td>
+                    </tr>
+                }
+
+            }
+        </table>
+
+    </div>
+    <div class="col-sm-4">
+        <p>
+            <a href="~/Sprint/IndexEpic/@Model.ProjectId" style="margin-top:20px" class="btn btn-default">All Project Tasks</a>
+        </p>
+        <table class="table">
+            <tr>
+                <th>Active Project Tasks</th>
+            </tr>
+            @foreach (var item in Model.ProjectTasks.ToList())
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                </tr>
+            }
+        </table>
+        @*<div style="margin-top:10px">@Html.ActionLink("Add Task", "CreateTask", new { id = Model.ProjectId })</div>*@
+        @*<div style="margin-top:10px">@Html.ActionLink("All Project Tasks", "AllProjectTasks", new { id = Model.ProjectId })</div>*@
+   </div>
+</div>
+

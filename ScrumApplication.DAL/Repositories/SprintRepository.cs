@@ -82,7 +82,7 @@ namespace ScrumApplication.DAL.Repositories
             {
                 foreach(var sprint in db.Sprints)
                 {
-                    if (sprint != null && !sprint.IsDone)
+                    if (sprint.ProjectId==id && sprint != null && !sprint.IsDone)
                     {
                         return sprint.SprintId;
                     }

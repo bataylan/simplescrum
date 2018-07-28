@@ -195,6 +195,16 @@ namespace ScrumApplication.Web.Controllers
 
         }
 
+        public ActionResult Green(int id)
+        {
+            var existTask = new SprintTask();
+            existTask = db.SprintTasks.FirstOrDefault(x => x.SprintTaskId == id);
+            existTask.Done = false;
+            db.SaveChanges();
+
+            return RedirectToAction("IndexEpic", "Sprint", new { id = existTask.ProjectId });
+        }
+
         public ActionResult BackToList(int id)
         {
             if (UserRepository.IsUserSigned())

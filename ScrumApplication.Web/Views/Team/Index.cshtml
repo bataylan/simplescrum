@@ -1,4 +1,5 @@
 ﻿@using ScrumApplication.Entity.Models;
+@using ScrumApplication.DAL.Repositories;
 @model IEnumerable<Team>
 
 @{
@@ -25,10 +26,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                <a href="@Url.Action("Edit", "Team", new { id = item.TeamId })" class="btn btn-default">Edit</a>
-                <a href="@Url.Action("Select", "Team", new { id = item.TeamId })" class="btn btn-default">Team Projects</a>
-            </td>
+                @if (TeamRepository.IsTeamManager(item.TeamId))
+                {
+                    <td><a href="@Url.Action("Edit", "Team", new { id = item.TeamId })" class="btn btn-default">Edit</a></td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                    <td><a href="@Url.Action("Select", "Team", new { id = item.TeamId })" class="btn btn-default">Team Projects</a></td>
+            
         </tr>
     }
 

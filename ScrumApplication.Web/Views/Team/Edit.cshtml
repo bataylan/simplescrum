@@ -27,11 +27,10 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-
-                <a href="@Url.Action("AddUser", "Team", new { id = Model.TeamId })" class="btn btn-default">Add User</a>
-                @if (Model.Manager.UserId == UserRepository.GetUserId())
+                @if (TeamRepository.IsTeamManager(Model.TeamId))
                 {
+                    <input type="submit" value="Save" class="btn btn-default" />
+                    <a href="@Url.Action("AddUser", "Team", new { id = Model.TeamId })" class="btn btn-default">Add User</a>
                     <a href="@Url.Action("ChangeManager", "Team", new { id = Model.TeamId })" class="btn btn-default">Change ScrumMaster</a>
                 }
             </div>
@@ -72,8 +71,6 @@
             <div>
             </div>
         </div>
-
-
     </div>
 </div>
     

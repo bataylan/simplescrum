@@ -1,4 +1,5 @@
 ﻿@using ScrumApplication.Entity.Models
+@using ScrumApplication.DAL.Repositories
 @model SprintModel
 
 @{
@@ -14,8 +15,11 @@
             @*<a href="~/Sprint/CreateTask/" style="margin-top:20px" class="btn btn-default">Create Task</a>*@
             @*<a href="~/Sprint/EditSprint/" style="margin-top:20px" class="btn btn-default">Edit Sprint</a>*@
             <a href="@Url.Action("CreateTask", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;" class="btn btn-default">Create Task</a>
-            <a href="@Url.Action("EditSprint", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;margin-left:30px;" class="btn btn-default">Edit Sprint</a>
-            <a href="@Url.Action("EndSprint", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;" class="btn btn-default" onclick="return confirm('Are you sure to end current Sprint? New sprint will be created automatically and uncompleted tasks will be added to next sprint.');">End Sprint</a>
+            @if (TeamRepository.IsSprintManager(Model.SprintId))
+            {
+                <a href="@Url.Action("EditSprint", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;margin-left:30px;" class="btn btn-default">Edit Sprint</a>
+                <a href="@Url.Action("EndSprint", "Sprint", new { id = Model.SprintId }, Request.Url.Scheme)" style="margin-top:20px;" class="btn btn-default" onclick="return confirm('Are you sure to end current Sprint? New sprint will be created automatically and uncompleted tasks will be added to next sprint.');">End Sprint</a>
+            }
         </p>
         <table class="table">
             <tr>
@@ -73,19 +77,26 @@
             {
                 if (task.Done)
                 {
-                    <tr>
-                        <td>@task.Name</td>
-                        <td>@task.Priority</td>
-                        @if (task.AssignedTo != null)
-                        {
-                            <td>@task.AssignedTo</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td>@task.Point</td>
-                    </tr>
+            <tr>
+                <td>@task.Name</td>
+                <td>@task.Priority</td>
+                @if (task.AssignedTo != null)
+                {
+                    <td>@task.AssignedTo</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                @if (TeamRepository.IsSprintManager(task.SprintId))
+                {
+                    <td>
+                        <a href="@Url.Action("Green", "Sprint", new { id = task.SprintTaskId }, Request.Url.Scheme)" class="btn btn-default">Green</a>
+                    </td>
+                }
+
+                <td>@task.Point</td>
+            </tr>
                 }
 
             }
@@ -109,8 +120,6 @@
                 </tr>
             }
         </table>
-        @*<div style="margin-top:10px">@Html.ActionLink("Add Task", "CreateTask", new { id = Model.ProjectId })</div>*@
-        @*<div style="margin-top:10px">@Html.ActionLink("All Project Tasks", "AllProjectTasks", new { id = Model.ProjectId })</div>*@
    </div>
 </div>
 

@@ -175,6 +175,14 @@
     <Compile Include="Migrations\201807271546192_MigrationTwentyNine1.Designer.cs">
       <DependentUpon>201807271546192_MigrationTwentyNine1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807281404427_thirty.cs" />
+    <Compile Include="Migrations\201807281404427_thirty.Designer.cs">
+      <DependentUpon>201807281404427_thirty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807281405157_MigrationThirty.cs" />
+    <Compile Include="Migrations\201807281405157_MigrationThirty.Designer.cs">
+      <DependentUpon>201807281405157_MigrationThirty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Member.cs" />
@@ -285,6 +293,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807271546192_MigrationTwentyNine1.resx">
       <DependentUpon>201807271546192_MigrationTwentyNine1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807281404427_thirty.resx">
+      <DependentUpon>201807281404427_thirty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807281405157_MigrationThirty.resx">
+      <DependentUpon>201807281405157_MigrationThirty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

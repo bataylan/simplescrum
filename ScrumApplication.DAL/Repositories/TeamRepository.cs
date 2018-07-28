@@ -34,7 +34,6 @@ namespace ScrumApplication.DAL.Repositories
             }
         }
 
-        //member'ı tamamen sil
         public static bool RemoveMemberFromTeam(int memberId, int teamId)
         {
             using (var db = new ScrumApplicationDbContext())
@@ -70,7 +69,7 @@ namespace ScrumApplication.DAL.Repositories
                     {
                         var newMember = new Member();
                         var existUser = db.Users.FirstOrDefault(x => x.UserId == userId);
-                        if (roleCode < 3)
+                        if (roleCode == 2)
                         {
                             var newManager = new Manager();
                             newManager.UserId = existUser.UserId;
@@ -104,6 +103,74 @@ namespace ScrumApplication.DAL.Repositories
             return false;
         }
 
+        public static bool IsSprintManager(int sprintId)
+        {
+            if(UserRepository.IsUserSigned())
+            {
+                var existUser = new User();
+                var existSprint = new Sprint();
+                var existProject = new Project();
+                var existTeam = new Team();
+                var existManager = new Manager();
+                using (var db = new ScrumApplicationDbContext())
+                {
+                    existUser = UserRepository.GetUser();
+                    existSprint = db.Sprints.FirstOrDefault(x => x.SprintId == sprintId);
+                    existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existSprint.ProjectId);
+                    existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProject.TeamId);
+                    existManager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
+                    if (existUser.UserId == existManager.UserId)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool IsProjectManager(int projectId)
+        {
+            if(UserRepository.IsUserSigned())
+            {
+                var existUser = new User();
+                var existProject = new Project();
+                var existTeam = new Team();
+                var existManager = new Manager();
+                using (var db = new ScrumApplicationDbContext())
+                {
+                    existUser = UserRepository.GetUser();
+                    existProject = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+                    existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProject.TeamId);
+                    existManager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
+                    if (existUser.UserId == existManager.UserId)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool IsTeamManager(int teamId)
+        {
+            if(UserRepository.IsUserSigned())
+            {
+                var existUser = new User();
+                var existTeam = new Team();
+                var existManager = new Manager();
+                using (var db = new ScrumApplicationDbContext())
+                {
+                    existUser = UserRepository.GetUser();
+                    existTeam = db.Teams.FirstOrDefault(x => x.TeamId == teamId);
+                    existManager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
+                    if (existUser.UserId == existManager.UserId)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         //test et
         public static bool DeleteTeam(int teamId)
         {

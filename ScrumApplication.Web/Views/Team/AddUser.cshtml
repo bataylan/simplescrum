@@ -31,6 +31,6 @@
 </div>
 }
 
-    <div>
-        @Html.ActionLink("Back to List", "BackToList", new { id = Model.UserId })
-    </div>
+<div>
+    <a href="@Url.Action("Edit", "Team", new { id = Model.TeamId })" class="btn btn-default">Back To Edit</a>
+</div>

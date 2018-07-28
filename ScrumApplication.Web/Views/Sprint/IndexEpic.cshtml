@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ScrumApplication.Entity.Models.ProjectTask>
+﻿@using ScrumApplication.DAL.Repositories;
+@model IEnumerable<ScrumApplication.Entity.Models.ProjectTask>
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-    <a href="@Url.Action("CreateEpic", "Sprint", new { id = Model.FirstOrDefault().ProjectId})"><button style="margin-top:10px" class="btn btn-default">Create Task</button></a>
+    <a href="@Url.Action("CreateEpic", "Sprint", new { id = Model.FirstOrDefault().ProjectId})"><button style="margin-top:10px" class="btn btn-default">Create Epic Task</button></a>
 </p>
 
 @if (Model.FirstOrDefault().Name != null)
@@ -69,7 +70,10 @@
                         @item.Priority
                     </td>
                     <td>
-                        <a href="@Url.Action("GreenEpic", "Sprint", new { id = item.ProjectTaskId })" class="btn btn-default">Green</a>
+                        @if (TeamRepository.IsProjectManager(item.ProjectId))
+                        {
+                            <a href="@Url.Action("GreenEpic", "Sprint", new { id = item.ProjectTaskId })" class="btn btn-default">Green</a>
+                        }
                         <a href="@Url.Action("DeleteEpic", "Sprint", new { id = item.ProjectTaskId })" class="btn btn-default">Delete</a>
                     </td>
                 </tr>

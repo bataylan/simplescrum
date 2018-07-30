@@ -162,6 +162,10 @@ namespace ScrumApplication.Web.Controllers
                     var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == teamId);
                     int userId = UserRepository.GetUserId();
                     var existMember = existTeam.Members.ToList().FirstOrDefault(x => x.UserId == userId);
+                    if(existTeam.Manager.UserId == userId)
+                    {
+                        return Content("ScrumMaster can't take tasks");
+                    }
                     if( existMember != null)
                     {
                         existTask.MemberId = existMember.MemberId;

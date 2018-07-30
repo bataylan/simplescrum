@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ScrumApplication.DAL.Repositories;
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -22,7 +23,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Teams", "Teams", "Home")</li>
-                    @if (Request.Cookies["User"] != null && Request.Cookies["User"]["Id"] !=null)
+                    @if (UserRepository.IsUserSigned())
                     {
                         <li>@Html.ActionLink("Sign Out", "Logout", "User")</li>
                     }

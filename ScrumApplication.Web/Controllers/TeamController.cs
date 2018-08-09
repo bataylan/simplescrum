@@ -77,11 +77,10 @@ namespace ScrumApplication.Web.Controllers
         [HttpPost]
         public ActionResult ChangeManager(Manager manager)
         {
-            var existUser = new User();
-            var newManager = new Manager();
+            var existMember = new Member();
             var existTeam = db.Teams.FirstOrDefault(x => x.ManagerId == manager.ManagerId);
-            existUser = db.Users.FirstOrDefault(x => x.Mail == manager.Mail);
-            TeamRepository.ChangeManager(existUser.UserId, existTeam.TeamId);
+            existMember = db.Members.FirstOrDefault(x => x.Mail == manager.Mail && x.TeamId == existTeam.TeamId);
+            TeamRepository.ChangeManager(existMember.MemberId, existTeam.TeamId);
 
             return RedirectToAction("Edit", "Team", new { id = existTeam.TeamId });
         }

@@ -8,75 +8,74 @@
 
 <h2>Projects</h2>
     <p>
-        <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-default">Create Project</a>
+        <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-primary">Create Project</a>
     </p>
 
 
 @if (Model.FirstOrDefault().Name != null)
 {
-    <h4 style="margin-top:30px">Active Projects</h4>
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>End Date</th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            if (!item.IsDone)
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Projects</th>
+                <th scope="col">End Date</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @item.Name
-                    </td>
-                    <td>
-                        @item.EndDate
+                if (!item.IsDone)
+                {
+                    <tr>
+                        <th scope="row">
+                            <a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" >@item.Name</a>
 
-                    </td>
-                    <td>
-                        @if (TeamRepository.IsProjectManager(item.ProjectId))
-                        {
-                            <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-default">Edit</a>
-                            <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-default">Complete</a>
-                        }
-                        <a href="@Url.Action("GoSprint", "Project", new { id = item.ProjectId })" class="btn btn-default">Project Home</a>
-                        <a href="@Url.Action("AllProjectTasks", "Project", new { id = item.ProjectId })" class="btn btn-default">Epic Tasks</a>
-                    </td>
-                </tr>
+                            
+                        </th>
+                        <td>
+                            @item.EndDate.Day.@item.EndDate.Month.@item.EndDate.Year
+
+                        </td>
+                        <td>
+                            @if (TeamRepository.IsProjectManager(item.ProjectId))
+                            {
+                                <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-danger">Edit</a>
+                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-green">Complete</a>
+                            }
+                            @*<a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" class="btn btn-primary">Project Home</a>*@
+                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-success">Epic Tasks</a>
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </table>
-    <h4>Completed Projects</h4>
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>End Date</th>
-        </tr>
-        @foreach (var item in Model)
-        {
-            if (item.IsDone)
+            @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @item.Name
-                    </td>
-                    <td>
-                        @item.EndDate
-                        @if (item.EndDate < DateTime.Now)
-                        {
-                            <span> Project expired, please check project duration</span>
-                        }
-                    </td>
-                    <td>
-                        @if (TeamRepository.IsProjectManager(item.ProjectId))
-                        {
-                            <a href="@Url.Action("Green", "Project", new { id = item.ProjectId })" class="btn btn-default">Mark as Uncompleted</a>
-                        }
-                    </td>
-                </tr>
-            }
+                if (item.IsDone)
+                {
+                    <tr class="table-active">
+                        <th scope="row">
+                            @item.Name
+                        </th>
+                        <td>
+                            @item.EndDate
+                            @if (item.EndDate < DateTime.Now)
+                            {
+                                <span> Project expired, please check project duration</span>
+                            }
+                        </td>
+                        <td>
+                            @if (TeamRepository.IsProjectManager(item.ProjectId))
+                            {
+                                <a href="@Url.Action("GreenProject", "Project", new { id = item.ProjectId })" class="btn btn-default">Mark as Uncompleted</a>
+                            }
+                        </td>
+                    </tr>
+                }
 
-        }
+            }
+        </tbody>
     </table>
 }
 

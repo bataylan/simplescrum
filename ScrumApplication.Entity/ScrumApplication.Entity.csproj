@@ -183,15 +183,66 @@
     <Compile Include="Migrations\201807281405157_MigrationThirty.Designer.cs">
       <DependentUpon>201807281405157_MigrationThirty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808020843094_MigrationFourty.cs" />
+    <Compile Include="Migrations\201808020843094_MigrationFourty.Designer.cs">
+      <DependentUpon>201808020843094_MigrationFourty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808020956324_MigrationFourtyOne.cs" />
+    <Compile Include="Migrations\201808020956324_MigrationFourtyOne.Designer.cs">
+      <DependentUpon>201808020956324_MigrationFourtyOne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808021016441_MigrationFourtyTwo.cs" />
+    <Compile Include="Migrations\201808021016441_MigrationFourtyTwo.Designer.cs">
+      <DependentUpon>201808021016441_MigrationFourtyTwo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808021043223_MigrationFourtyThree.cs" />
+    <Compile Include="Migrations\201808021043223_MigrationFourtyThree.Designer.cs">
+      <DependentUpon>201808021043223_MigrationFourtyThree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808021258341_MigrationFourtyFour.cs" />
+    <Compile Include="Migrations\201808021258341_MigrationFourtyFour.Designer.cs">
+      <DependentUpon>201808021258341_MigrationFourtyFour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808021524123_MigrationFourtyFive.cs" />
+    <Compile Include="Migrations\201808021524123_MigrationFourtyFive.Designer.cs">
+      <DependentUpon>201808021524123_MigrationFourtyFive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808031024061_MigrationFourtyEight.cs" />
+    <Compile Include="Migrations\201808031024061_MigrationFourtyEight.Designer.cs">
+      <DependentUpon>201808031024061_MigrationFourtyEight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808090819020_MigrationFiftyOne.cs" />
+    <Compile Include="Migrations\201808090819020_MigrationFiftyOne.Designer.cs">
+      <DependentUpon>201808090819020_MigrationFiftyOne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808090819524_MigrationFiftyOne1.cs" />
+    <Compile Include="Migrations\201808090819524_MigrationFiftyOne1.Designer.cs">
+      <DependentUpon>201808090819524_MigrationFiftyOne1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808090836392_MigrationFiftyTwo.cs" />
+    <Compile Include="Migrations\201808090836392_MigrationFiftyTwo.Designer.cs">
+      <DependentUpon>201808090836392_MigrationFiftyTwo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808091104208_MigrationFiftyTwo1.cs" />
+    <Compile Include="Migrations\201808091104208_MigrationFiftyTwo1.Designer.cs">
+      <DependentUpon>201808091104208_MigrationFiftyTwo1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\BacklogViewModel.cs" />
+    <Compile Include="Models\BacklogToMember.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\HomeProjectViewModel.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\Member.cs" />
+    <Compile Include="Models\MemberViewModel.cs" />
     <Compile Include="Models\Project.cs" />
-    <Compile Include="Models\ProjectTask.cs" />
+    <Compile Include="Models\Epic.cs" />
     <Compile Include="Models\Manager.cs" />
+    <Compile Include="Models\ProjectHomeViewModel.cs" />
     <Compile Include="Models\Sprint.cs" />
-    <Compile Include="Models\SprintModel.cs" />
-    <Compile Include="Models\SprintTask.cs" />
+    <Compile Include="Models\ProductBacklog.cs" />
+    <Compile Include="Models\SprintViewModel.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -299,6 +350,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807281405157_MigrationThirty.resx">
       <DependentUpon>201807281405157_MigrationThirty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808020843094_MigrationFourty.resx">
+      <DependentUpon>201808020843094_MigrationFourty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808020956324_MigrationFourtyOne.resx">
+      <DependentUpon>201808020956324_MigrationFourtyOne.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808021016441_MigrationFourtyTwo.resx">
+      <DependentUpon>201808021016441_MigrationFourtyTwo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808021043223_MigrationFourtyThree.resx">
+      <DependentUpon>201808021043223_MigrationFourtyThree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808021258341_MigrationFourtyFour.resx">
+      <DependentUpon>201808021258341_MigrationFourtyFour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808021524123_MigrationFourtyFive.resx">
+      <DependentUpon>201808021524123_MigrationFourtyFive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808031024061_MigrationFourtyEight.resx">
+      <DependentUpon>201808031024061_MigrationFourtyEight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808090819020_MigrationFiftyOne.resx">
+      <DependentUpon>201808090819020_MigrationFiftyOne.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808090819524_MigrationFiftyOne1.resx">
+      <DependentUpon>201808090819524_MigrationFiftyOne1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808090836392_MigrationFiftyTwo.resx">
+      <DependentUpon>201808090836392_MigrationFiftyTwo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808091104208_MigrationFiftyTwo1.resx">
+      <DependentUpon>201808091104208_MigrationFiftyTwo1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,34 +9,30 @@
 <h2>Your Teams</h2>
 
 <p>
-    <a href="@Url.Action("Create", "Team")" class="btn btn-default">Create Team</a>
+    <a href="@Url.Action("Create", "Team")" class="btn btn-primary">Create Team</a>
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
 
-    
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
+<table class="table table-hover">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </th>
                 @if (TeamRepository.IsTeamManager(item.TeamId))
                 {
-                    <td><a href="@Url.Action("Edit", "Team", new { id = item.TeamId })" class="btn btn-default">Edit</a></td>
+                    <td><a href="@Url.Action("Edit", "Team", new { id = item.TeamId })" 
+                           class="btn btn-danger">Edit</a></td>
                 }
                 else
                 {
                     <td></td>
                 }
-                    <td><a href="@Url.Action("Select", "Team", new { id = item.TeamId })" class="btn btn-default">Team Projects</a></td>
-            
-        </tr>
-    }
+                <td><a href="@Url.Action("Select", "Team", new { id = item.TeamId })" 
+                       class="btn btn-success">Team Projects</a></td>
 
+            </tr>
+        }
+    </tbody>
 </table>

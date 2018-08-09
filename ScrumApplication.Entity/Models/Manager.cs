@@ -16,10 +16,12 @@ namespace ScrumApplication.Entity.Models
         public string Mail { get; set; }
 
         public int UserId { get; set; }
+        public int? MemberId { get; set; }
         public int? CompanyId { get; set; }
 
         
         public virtual User User { get; set; } 
-        public virtual List<Team> Teams { get; set; }
+        public virtual Member Member { get; set; }
+        public virtual ICollection<Team> Teams { get; set; }
     }
 }

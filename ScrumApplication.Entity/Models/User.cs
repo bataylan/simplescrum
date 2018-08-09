@@ -14,11 +14,15 @@ namespace ScrumApplication.Entity.Models
         public int UserId { get; set; }
 
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "First Name")]
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "User mail")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "User Mail")]
         public string Mail { get; set; }
 
         [Required]
@@ -27,7 +31,7 @@ namespace ScrumApplication.Entity.Models
         public string Password { get; set; }
         public int TotalPoint { get; set; }
 
-        public virtual List<Member> Members { get; set; }
-        public virtual List<Manager> Managers { get; set; }
+        public virtual ICollection<Member> Members { get; set; }
+        public virtual ICollection<Manager> Managers { get; set; }
     }
 }

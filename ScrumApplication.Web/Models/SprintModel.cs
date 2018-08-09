@@ -12,7 +12,7 @@ namespace ScrumApplication.Web.Models
         public string Name { get; set; }
         public DateTime EndDate { get; set; }
         public int ProjectId { get; set; }
-        public List<SprintTask> SprintTasks { get; set; }
-        public List<ProjectTask> ProjectTasks { get; set; }
+        public List<ProductBacklog> ProductBacklogs { get; set; }
+        public List<Epic> Epics { get; set; }
     }
 }

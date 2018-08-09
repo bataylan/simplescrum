@@ -29,7 +29,8 @@ namespace ScrumApplication.Entity.Models
         public virtual User User { get; set; }
         public virtual Team Team { get; set; }
         public virtual Company Company { get; set; }
-        public virtual List<SprintTask> SprintTasks { get; set; }
+        public virtual ICollection<ProductBacklog> ProductBacklogs { get; set; }
+        public virtual ICollection<Comment> Comment { get; set; }
 
     }
 }

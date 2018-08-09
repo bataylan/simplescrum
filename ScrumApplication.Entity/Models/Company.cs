@@ -15,8 +15,8 @@ namespace ScrumApplication.Entity.Models
         public int Name { get; set; }
 
 
-        public virtual List<Team> Teams { get; set; }
-        public virtual List<Member> Members { get; set; }
-        public virtual List<Manager> Managers { get; set; }
+        public virtual ICollection<Team> Teams { get; set; }
+        public virtual ICollection<Member> Members { get; set; }
+        public virtual ICollection<Manager> Managers { get; set; }
     }
 }

@@ -45,14 +45,18 @@
             </tr>
             @foreach (var user in Model.Members.ToList())
             {
-                <tr>
-                    <td style="margin-left:10px; margin-top:10px;">
-                        @user.Name
-                    </td>
-                    <td style="">
-                        @user.Mail
-                    </td>
-                </tr>
+                if (user.RoleCode > 2)
+                {
+                    <tr>
+                        <td style="margin-left:10px; margin-top:10px;">
+                            @user.Name
+                        </td>
+                        <td style="">
+                            @user.Mail
+                        </td>
+                    </tr>
+                }
+
             }
         </table>
         <table class="table">

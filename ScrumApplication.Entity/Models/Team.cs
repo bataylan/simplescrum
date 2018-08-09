@@ -17,9 +17,9 @@ namespace ScrumApplication.Entity.Models
 
         public int? CompanyId { get; set; }
 
+        public virtual ICollection<Project> Projects { get; set; }
         public virtual Manager Manager { get; set; }
         public virtual Company Company { get; set; }
-        public virtual List<Member> Members { get; set; }
-        public virtual List<Project> Projects { get; set; }
+        public virtual ICollection<Member> Members { get; set; }
     }
 }

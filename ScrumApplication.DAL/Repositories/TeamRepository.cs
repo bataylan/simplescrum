@@ -69,28 +69,23 @@ namespace ScrumApplication.DAL.Repositories
                     {
                         var newMember = new Member();
                         var existUser = db.Users.FirstOrDefault(x => x.UserId == userId);
+                        newMember.TeamId = teamId;
+                        newMember.UserId = userId;
+                        newMember.Name = existUser.Name;
+                        newMember.Mail = existUser.Mail;
+                        newMember.RoleCode = roleCode;
+                        existTeam.Members.Add(newMember);
+                        db.SaveChanges();
                         if (roleCode == 2)
                         {
                             var newManager = new Manager();
                             newManager.UserId = existUser.UserId;
-                            newManager.User = existUser;
+                            newManager.MemberId = newMember.MemberId;
                             newManager.Name = existUser.Name;
                             newManager.Mail = existUser.Mail;
                             db.Managers.Add(newManager);
                             db.SaveChanges();
                             existTeam.ManagerId = newManager.ManagerId;
-                            existTeam.Manager = newManager;
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            newMember.TeamId = teamId;
-                            newMember.Team = existTeam;
-                            newMember.UserId = userId;
-                            newMember.Name = existUser.Name;
-                            newMember.Mail = existUser.Mail;
-                            newMember.RoleCode = roleCode;
-                            existTeam.Members.Add(newMember);
                             db.SaveChanges();
                         }
                         return true;
@@ -103,30 +98,30 @@ namespace ScrumApplication.DAL.Repositories
             return false;
         }
 
-        public static bool IsSprintManager(int sprintId)
-        {
-            if(UserRepository.IsUserSigned())
-            {
-                var existUser = new User();
-                var existSprint = new Sprint();
-                var existProject = new Project();
-                var existTeam = new Team();
-                var existManager = new Manager();
-                using (var db = new ScrumApplicationDbContext())
-                {
-                    existUser = UserRepository.GetUser();
-                    existSprint = db.Sprints.FirstOrDefault(x => x.SprintId == sprintId);
-                    existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existSprint.ProjectId);
-                    existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProject.TeamId);
-                    existManager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
-                    if (existUser.UserId == existManager.UserId)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+        //public static bool IsSprintManager(int sprintId)
+        //{
+        //    if(UserRepository.IsUserSigned())
+        //    {
+        //        var existUser = new User();
+        //        var existSprint = new Sprint();
+        //        var existProject = new Project();
+        //        var existTeam = new Team();
+        //        var existManager = new Manager();
+        //        using (var db = new ScrumApplicationDbContext())
+        //        {
+        //            existUser = UserRepository.GetUser();
+        //            existSprint = db.Sprints.FirstOrDefault(x => x.SprintId == sprintId);
+        //            existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existSprint.ProjectId);
+        //            existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProject.TeamId);
+        //            existManager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
+        //            if (existUser.UserId == existManager.UserId)
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    return false;
+        //}
 
         public static bool IsProjectManager(int projectId)
         {
@@ -218,16 +213,6 @@ namespace ScrumApplication.DAL.Repositories
                                 where member.UserId == userId
                                 select member.Team;
                     _teamList = query.ToList();
-
-                    foreach(var manager in db.Managers)
-                    {
-
-                        if(manager.UserId == userId)
-                        {
-                            var existTeam = db.Teams.FirstOrDefault(x => x.ManagerId == manager.ManagerId);
-                            _teamList.Add(existTeam);
-                        }
-                    }
                 }
                 
             }
@@ -235,38 +220,32 @@ namespace ScrumApplication.DAL.Repositories
             return _teamList;
         }
 
-        public static bool ChangeManager(int userId, int teamId)
+        public static bool ChangeManager(int memberId, int teamId)
         {
             using (var db = new ScrumApplicationDbContext())
             {
                 var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == teamId);
-                var existUser = db.Users.FirstOrDefault(x => x.UserId == userId);
-                var manager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
-                var managerUser = db.Users.FirstOrDefault(x => x.UserId == manager.UserId);
-                if(existTeam != null && existUser != null)
+                //member that will be new manager
+                var existMember = db.Members.FirstOrDefault(x => x.MemberId == memberId );
+                //manager that will be deleted
+                var existManager = db.Managers.FirstOrDefault(x => x.ManagerId == existTeam.ManagerId);
+                //member that role code will change to 3
+                var _existMemberManager = db.Members.FirstOrDefault(x => x.MemberId == existManager.MemberId);
+                if(existTeam != null &&  existMember != null && existTeam.TeamId == existMember.TeamId &&
+                    existManager != null && _existMemberManager != null)
                 {
-                    if (manager != null)
-                    {
-                        db.Managers.Remove(manager);
-                        TeamRepository.AddUserToTeam(managerUser.UserId, existTeam.TeamId, 3);
-                        db.SaveChanges();
-                    }
-                    foreach(var member in existTeam.Members.ToList())
-                    {
-                        if(member.UserId == userId)
-                        {
-                            existTeam.Members.Remove(member);
-                            db.Members.Remove(member);
-                            db.SaveChanges();
-                            break;
-                        }
-                    }
+                    //exist manager removed because every team can have one manager 
+                    //and manager have one team
+                    db.Managers.Remove(existManager);
+                    //member that will be manager role code updated
+                    existMember.RoleCode = 2;
+                    //member that was manager role code updated
+                    _existMemberManager.RoleCode = 3;
                     var newManager = new Manager();
-                    newManager.UserId = existUser.UserId;
-                    newManager.User = existUser;
-                    newManager.Mail = existUser.Mail;
-                    newManager.Name = existUser.Name;
-                    existUser.Managers.Add(newManager);
+                    newManager.UserId = existMember.UserId;
+                    newManager.MemberId = existMember.MemberId;
+                    newManager.Mail = existMember.Mail;
+                    newManager.Name = existMember.Name;
                     db.Managers.Add(newManager);
                     db.SaveChanges();
                     existTeam.ManagerId = newManager.ManagerId;
@@ -278,23 +257,35 @@ namespace ScrumApplication.DAL.Repositories
             }
         }
 
-        public static int GetLastTeamId()
-        {
-            HttpCookie cookie = HttpContext.Current.Request.Cookies.Get("LastTeam");
-            return Int32.Parse(cookie.Value);
-        }
-
-        public static int GetTeamIdFromSprintTask(int taskId)
+        public static int GetUserMemberIdFromProjectId(int projectId)
         {
             using (var db = new ScrumApplicationDbContext())
             {
-                var existTask = new SprintTask();
-                var existSprint = new Sprint();
                 var existProject = new Project();
                 var existTeam = new Team();
-                existTask = db.SprintTasks.FirstOrDefault(x => x.SprintTaskId == taskId);
-                existSprint = db.Sprints.FirstOrDefault(x => x.SprintId == existTask.SprintId);
-                existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existSprint.ProjectId);
+                existProject = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+                existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProject.TeamId);
+                int userId = UserRepository.GetUserId();
+                foreach(var member in db.Members)
+                {
+                    if(member.TeamId == existTeam.TeamId && member.UserId == userId)
+                    {
+                        return member.MemberId;
+                    }
+                }
+                return 0;
+            }
+        }
+
+        public static int GetTeamIdFromProductBacklog(int taskId)
+        {
+            using (var db = new ScrumApplicationDbContext())
+            {
+                var existBacklog = new ProductBacklog();
+                var existProject = new Project();
+                var existTeam = new Team();
+                existBacklog = db.ProductBacklogs.FirstOrDefault(x => x.ProductBacklogId == taskId);
+                existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existBacklog.ProjectId);
                 existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProject.TeamId);
 
                 if(existTeam.TeamId != 0)

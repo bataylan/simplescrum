@@ -5,10 +5,10 @@ using System.Web;
 
 namespace ScrumApplication.Web.Models
 {
-    public class SprintTaskModel
+    public class ProductBacklogModel
     {
         
-        public int SprintTaskId { get; set; }
+        public int ProductBacklogId { get; set; }
         public string Name { get; set; }
         public int Priority { get; set; }
         public int Point { get; set; }
@@ -17,7 +17,7 @@ namespace ScrumApplication.Web.Models
         public int? UserId { get; set; }
         public string UserName { get; set; }
 
-        public SprintTaskModel()
+        public ProductBacklogModel()
         {
             UserId = null;
             UserName = null;

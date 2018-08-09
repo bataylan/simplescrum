@@ -1,0 +1,180 @@
+﻿@using ScrumApplication.Entity.Models
+@using ScrumApplication.DAL.Repositories
+@model ScrumApplication.Entity.Models.SprintViewModel
+@{
+    ViewBag.Title = "Sprint";
+}
+
+<h2>Sprint @Model.SprintNo</h2>
+@if (Model.SprintNo == Model.ProjectCurrentSprint)
+{
+    <h4>Project Current Sprint</h4>
+}
+<div class="row" style="margin-top:20px; margin-bottom:10px;">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Create Task</a>
+            <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-primary">All Project Epics</a>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <a href="@Url.Action("IndexBacklog", "Project", new { id = Model.ProjectId }, Request.Url.Scheme)" type="button" class="btn btn-primary">Sprints</a>
+            @for (int i = 1; i <= Model.SprintCount; i++)
+            {
+                if (Model.SprintNo == i)
+                {
+                    <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-primary disabled">@i</a>
+
+                }
+                else
+                {
+                    if (i < Model.ProjectCurrentSprint)
+                    {
+                        <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-secondary">@i</a>
+                    }
+                    else if (i == Model.ProjectCurrentSprint)
+                    {
+                        <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-success">@i</a>
+                    }
+                    else
+                    {
+                        <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-primary">@i</a>
+                    }
+                }
+
+            }
+        </div>
+    </div>
+</div>
+
+
+
+@if (Model.SprintBacklogs.FirstOrDefault().Name != null)
+{
+    <div class="row" style="display:flex">
+        <div>
+            @*<a href="~/Sprint/CreateTask/" style="margin-top:20px" class="btn btn-primary">Create Task</a>*@
+            @*<a href="~/Sprint/EditSprint/" style="margin-top:20px" class="btn btn-primary">Edit Sprint</a>*@
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Backlogs</th>
+                        <th scope="col">Epic Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Sprint</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Story Point</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var backlog in Model.SprintBacklogs)
+                    {
+                        if (!backlog.Done)
+                        {
+                            <tr>
+                                <th scope="row">
+                                    <a href="@Url.Action("EditBacklog", "Project",
+                                            new { id = backlog.ProductBacklogId },
+                                        Request.Url.Scheme)">@backlog.Name</a>
+                                    </th>
+                                    <td>@backlog.EpicName</td>
+                                    <td>
+                                        @if (@backlog.BacklogStatus.Equals(Status.Open))
+                                        {
+                                            <button class="btn btn-secondary btn-sm">Open</button>
+                                        }
+                                        @if (@backlog.BacklogStatus.Equals(Status.Approved))
+                                        {
+                                            <button class="btn btn-primary btn-sm">Approved</button>
+                                        }
+                                        @if (@backlog.BacklogStatus.Equals(Status.Developing))
+                                        {
+                                            <button class="btn btn-info btn-sm">Developing</button>
+                                        }
+                                        @if (@backlog.BacklogStatus.Equals(Status.Completed))
+                                        {
+                                            <button class="btn btn-success btn-sm">Completed</button>
+                                        }
+                                        @if (@backlog.BacklogStatus.Equals(Status.Tested))
+                                        {
+                                            <button class="btn btn-warning btn-sm">Tested</button>
+                                        }
+                                        @if (@backlog.BacklogStatus.Equals(Status.Pending))
+                                        {
+                                            <button class="btn btn-danger btn-sm">Pending</button>
+                                        }
+                                        @if (@backlog.BacklogStatus.Equals(Status.Cancelled))
+                                        {
+                                            <button class="btn btn-secondary disabled btn-sm">Cancelled</button>
+                                        }
+                                    </td>
+                                    <td>@backlog.SprintNo</td>
+                                    <td>@backlog.Priority</td>
+                                    <td>@backlog.StoryPoint</td>
+
+                                    @if (ProjectRepository.IsUserAssigned(backlog.ProductBacklogId, null))
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-secondary disabled btn-sm">
+                                                Assigned
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                    <a href="@Url.Action("GiveIn", "Project", new { id = backlog.ProductBacklogId },
+                                            Request.Url.Scheme)" class="btn btn-secondary">Give In</a>
+                                                    <a href="@Url.Action("CompleteBacklog", "Project", new { id = backlog.ProductBacklogId },
+                                        Request.Url.Scheme)" class="btn btn-success">Complete</a>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                    }
+
+
+                                </tr>
+                            }
+
+                        }
+                    @foreach (var backlog in Model.SprintBacklogs)
+                    {
+                        if (backlog.Done)
+                        {
+                            <tr class="table-active">
+                                <td>@backlog.Name</td>
+                                <td>@backlog.EpicName</td>
+                                <td>@backlog.BacklogStatus</td>
+                                <td>@backlog.SprintNo</td>
+                                <td>@backlog.Priority</td>
+                                <td>@backlog.StoryPoint</td>
+                                <td></td>
+                                <td></td>
+                                @if (TeamRepository.IsProjectManager(backlog.ProjectId))
+                                {
+                                    <td>
+                                        <a href="@Url.Action("GreenBacklog", "Project", new { id = backlog.ProductBacklogId },
+                                            Request.Url.Scheme)" class="btn btn-outline-success">Green</a>
+                                    </td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}

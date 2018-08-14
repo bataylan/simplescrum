@@ -31,27 +31,41 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("Index", "Project",new {id = id });
         }
                
-        public ActionResult Create()
+        public ActionResult Create(int? projectId)
         {
-            var newTeam = new Team();
+            var newTeamModel = new TeamCreateViewModel();
+            if(projectId.HasValue)
+            {
+                newTeamModel.ProjectId = projectId ?? default(int);
+            }
                         
-            return View(newTeam);
+            return View(newTeamModel);
         }
 
         [HttpPost]
-        public ActionResult Create(Team newTeam)
+        public ActionResult Create(TeamCreateViewModel newTeamModel)
         {
             if (UserRepository.IsUserSigned())
             {
                 int userId = UserRepository.GetUserId();
+                
 
-                db.Teams.Add(newTeam);
+                db.Teams.Add(newTeamModel.Team);
                 db.SaveChanges();
-                TeamRepository.AddUserToTeam(userId, newTeam.TeamId, 2);
+                TeamRepository.AddUserToTeam(userId, newTeamModel.Team.TeamId, 2);
+
+                if (newTeamModel.ProjectId != 0)
+                {
+                    var existProject = db.Projects.FirstOrDefault(x => x.ProjectId == newTeamModel.ProjectId);
+                    existProject.TeamId = newTeamModel.Team.TeamId;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Edit", "Project", new { id = existProject.ProjectId });
+                }
 
                 return RedirectToAction("Index", "Team", new { id = userId });
             }
-
+            
             return RedirectToAction("Login", "User");
         }
 

@@ -67,30 +67,58 @@ namespace ScrumApplication.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var existProject = new Project();
-            existProject = db.Projects.FirstOrDefault(x => x.ProjectId == id);
+            var existProjectModel = new ProjectEditViewModel();
+            existProjectModel.Project = db.Projects.FirstOrDefault(x => x.ProjectId == id);
 
-            return View(existProject);
+            int userId = UserRepository.GetUserId();
+
+            if (existProjectModel.Project != null && existProjectModel.Project.TeamId != 0)
+            {
+                var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProjectModel.Project.TeamId);
+
+                if (existTeam != null && existTeam.TeamId != 0)
+                {
+                    existProjectModel.AssignedTeam = existTeam;
+
+                    var userTeams = new List<Team>();
+                    userTeams.Add(existProjectModel.AssignedTeam);
+                    var userCommunityTeams = TeamRepository.GetTeams(userId);
+                    userTeams.AddRange(userCommunityTeams);
+
+                    existProjectModel.UserTeams = userTeams
+                        .GroupBy(x => x.TeamId)
+                        .Select(x => x.First())
+                        .ToList();
+                }
+            }
+            else
+            {
+                var userCommunityTeams = TeamRepository.GetTeams(userId);
+                existProjectModel.UserTeams = userCommunityTeams;
+            }
+
+            return View(existProjectModel);
         }
 
         [HttpPost]
-        public ActionResult Edit(Project existProject)
+        public ActionResult Edit(ProjectEditViewModel existProjectModel)
         {
 
             if (UserRepository.IsUserSigned())
             {
+                //Define project informations
                 var _existProject = new Project();
-                _existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existProject.ProjectId);
-                _existProject.Name = existProject.Name;
-                _existProject.DayCount = existProject.DayCount;
-                _existProject.EndDate = existProject.CreatedDate.AddDays(existProject.DayCount);
-                _existProject.DefaultSprintTime = existProject.DefaultSprintTime;
+                _existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existProjectModel.Project.ProjectId);
+                _existProject.Name = existProjectModel.Project.Name;
+                _existProject.DayCount = existProjectModel.Project.DayCount;
+                _existProject.EndDate = existProjectModel.Project.CreatedDate.AddDays(existProjectModel.Project.DayCount);
+                _existProject.DefaultSprintTime = existProjectModel.Project.DefaultSprintTime;
                 db.SaveChanges();
 
                 ActivityRepository.ActivityCreator
                     ("edited " + _existProject.Name + " project.", _existProject.ProjectId, null);
 
-                return RedirectToAction("Index", "Project", new { id = existProject.TeamId });
+                return RedirectToAction("Index", "Project", new { id = existProjectModel.Project.TeamId });
             }
 
             return RedirectToAction("Login", "User");

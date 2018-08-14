@@ -42,10 +42,10 @@
                             @if (TeamRepository.IsProjectManager(item.ProjectId))
                             {
                                 <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-danger">Edit</a>
-                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-green">Complete</a>
+                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-success">Complete</a>
                             }
                             @*<a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" class="btn btn-primary">Project Home</a>*@
-                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-success">Epic Tasks</a>
+                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-secondary">Epic Tasks</a>
                         </td>
                     </tr>
                 }

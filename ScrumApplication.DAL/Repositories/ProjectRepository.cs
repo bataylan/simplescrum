@@ -20,6 +20,8 @@ namespace ScrumApplication.DAL.Repositories
             {
                 db.Projects.Add(_newProject);
                 db.SaveChanges();
+                ActivityRepository.ActivityCreator
+                    ("created" + _newProject.Name ,_newProject.ProjectId, null);
             }
         }
 
@@ -236,6 +238,10 @@ namespace ScrumApplication.DAL.Repositories
                     {
                         db.BacklogToMembers.Remove(existBTM);
                         db.SaveChanges();
+                        var existBacklog = db.ProductBacklogs.FirstOrDefault(x => x.ProductBacklogId == backlogId);
+                        ActivityRepository.ActivityCreator
+                    ("unassigned " + existBTM.MemberName + " from " + existBacklog.Name, 
+                    existBacklog.ProjectId, existBacklog.ProductBacklogId);
                         return true;
                     }
                 }
@@ -286,7 +292,8 @@ namespace ScrumApplication.DAL.Repositories
                         existTask.Done = true;
                         existMember.TotalPoint += existTask.StoryPoint;
                         db.SaveChanges();
-
+                        ActivityRepository.ActivityCreator
+                    ("completed " + existTask.Name, existTask.ProjectId, existTask.ProductBacklogId);
                         return true;
                     }
 
@@ -371,6 +378,32 @@ namespace ScrumApplication.DAL.Repositories
                 }
                 return sprintCount;
             }
+        }
+
+        public static ProjectViewModel PrepareProjectHome(int projectId)
+        {
+            using (var db = new ScrumApplicationDbContext())
+            {
+                var projectModel = new ProjectViewModel();
+                projectModel.Project = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+                if (projectModel.Project != null)
+                {
+                    var tquery = from member in db.Members
+                                 where member.TeamId == projectModel.Project.TeamId
+                                 select member;
+                    projectModel.ProjectTeamMembers = tquery.ToList();
+
+                    var vquery = from activity in db.Activities
+                                 where activity.ProjectId == projectId
+                                 orderby activity.CreatedTime ascending
+                                 select activity;
+                    projectModel.ProjectActivities = vquery.ToList();
+
+                    return projectModel;
+                }
+                
+            }
+            return null;
         }
     }
 }

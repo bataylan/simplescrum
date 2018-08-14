@@ -34,15 +34,20 @@ namespace ScrumApplication.DAL.Repositories
             }
         }
 
-        public static bool RemoveMemberFromTeam(int memberId, int teamId)
+        public static bool RemoveMemberFromTeam(int memberId)
         {
             using (var db = new ScrumApplicationDbContext())
             {
                 var existMember = db.Members.FirstOrDefault(x => x.MemberId == memberId);
-                var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == teamId);
-                existTeam.Members.Remove(existMember);
-                db.Members.Remove(existMember);
-                db.SaveChanges();
+                var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existMember.TeamId);
+                if(existMember != null && existTeam != null)
+                {
+                    existTeam.Members.Remove(existMember);
+                    db.Members.Remove(existMember);
+                    db.SaveChanges();
+
+                    return true;
+                }
             }
                 
             return false;
@@ -326,6 +331,41 @@ namespace ScrumApplication.DAL.Repositories
             }
             return false;
 
+        }
+
+        public static List<User> GetUserCommunity(int userId)
+        {
+            using (var db = new ScrumApplicationDbContext())
+            {
+                var userCommunity = new List<User>();
+                var userTeamMembers = new List<Member>();
+                var userTeams = GetTeams(userId);
+                foreach(var team in userTeams)
+                {
+                    var query = from member in db.Members
+                                where member.TeamId == team.TeamId
+                                select member;
+                    if(query.Count() != 0)
+                    {
+                        userTeamMembers.AddRange(query.ToList());
+                    }
+                }
+                List<Member> distinctUsers = userTeamMembers
+                .GroupBy(m => m.UserId)
+                .Select(m => m.First())
+                .ToList();
+                foreach(var member in distinctUsers)
+                {
+                    var existUser = new User();
+                    existUser = db.Users.FirstOrDefault(x => x.UserId == member.UserId);
+                    if(existUser != null)
+                    {
+                        userCommunity.Add(existUser);
+                    }
+                }
+
+                return userCommunity;
+            }
         }
     }
 

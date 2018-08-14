@@ -33,6 +33,7 @@ namespace ScrumApplication.Entity.DbContext
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<BacklogToMember> BacklogToMembers { get; set; }
+        public virtual DbSet<Activity> Activities { get; set; }
 
     }
 

@@ -34,6 +34,14 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    @Html.LabelFor(model => model.Backlog.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Backlog.Description,
+                       new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Backlog.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
                     @Html.LabelFor(model => model.Backlog.SprintNo, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Backlog.SprintNo, new { htmlAttributes = new { @class = "form-control" } })
@@ -43,7 +51,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Backlog.Priority, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10 btn-group btn-group-toggle" data-toggle="buttons">
-                        
+
                         @Html.EditorFor(model => model.Backlog.Priority, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Backlog.Priority, "", new { @class = "text-danger" })
                     </div>
@@ -56,17 +64,22 @@
                         @Html.ValidationMessageFor(model => model.Backlog.StoryPoint, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Backlog.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Backlog.Description,
-                       new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Backlog.Description, "", new { @class = "text-danger" })
+                <div class="col-md-6" style="margin-top:20px;">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <input type="submit" value="Save" class="btn btn-primary" />
+                                    <a href="@Url.Action("IndexBacklog", "Project", new { id = Model.Backlog.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Back To List</a>
+                                    <a href="@Url.Action("CommentBacklog","Project", new { backlogId = Model.Backlog.ProductBacklogId }, Request.Url.Scheme)" class="btn btn-primary">Add Comment</a>
+                                </div>
+                            </div>
+                            @*<input type="submit" value="Save" class="btn btn-primary" />*@
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-
                 <div class="form-group">
                     @Html.LabelFor(model => model.Backlog.EpicId, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -83,55 +96,6 @@
                         @Html.ValidationMessageFor(model => model.Backlog.BacklogStatus, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                @if (Model.UnAssignedMembers.Count != 0)
-                {
-                    <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
-                        <p><span><b>Assign Members:</b></span></p>
-                        @foreach (var unasmember in Model.UnAssignedMembers)
-                        {
-                        <div class="col-md-4 col-sm-8">
-                            <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="First group">
-                                    <button class="btn btn-secondary disabled">@unasmember.Name</button>
-                                    <a href="@Url.Action("AssignBacklog","Project", 
-                                            new { memberId = unasmember.MemberId ,backlogId = Model.Backlog.ProductBacklogId },
-                                            Request.Url.Scheme)" class="btn btn-secondary">+</a>
-                                </div>
-                            </div>
-                        </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-12 col-sm-12" style="margin-top:30px; margin-bottom:30px;">
-                        <span>All Team Members assigned to task.</span>
-                    </div>
-                }
-                    <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
-                        @if (Model.AssignedMembers.Count != 0)
-                        {
-                            <p><span><b>Assigned Users:</b></span></p>
-                            foreach (var asmember in Model.AssignedMembers)
-                            {
-                                <div class="col-md-4 col-sm-8">
-                                    <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
-                                        <div class="btn-group mr-2" role="group" aria-label="First group">
-                                            <button class="btn btn-secondary disabled">@asmember.Name</button>
-                                            <a href="@Url.Action("UnAssignUserFromEditBacklog","Project", new { backlogId = Model.Backlog.ProductBacklogId, memberId = asmember.MemberId }, Request.Url.Scheme)" class="btn btn-secondary">X</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                        }
-                        else
-                        {
-                            <div class="col-md- col-sm-10" style="margin-top:30px;">
-                                <b>The Task is not Assigned to any Member.</b>
-                            </div>
-                        }
-                    </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.Backlog.AcceptanceCriteria,
                    htmlAttributes: new { @class = "control-label col-md-2" })
@@ -141,34 +105,61 @@
                        new { @class = "text-danger" })
                     </div>
                 </div>
+                @if (Model.UnAssignedMembers.Count != 0)
+                {
+                    <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
+                        <p><span><b>Assign Members:</b></span></p>
+                        @foreach (var unasmember in Model.UnAssignedMembers)
+                        {
+                            <div class="col-md-4 col-sm-8">
+                                <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                        <button class="btn btn-secondary disabled">@unasmember.Name</button>
+                                        <a href="@Url.Action("AssignBacklog","Project",
+                                            new { memberId = unasmember.MemberId ,backlogId = Model.Backlog.ProductBacklogId },
+                                            Request.Url.Scheme)" class="btn btn-secondary">+</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-12 col-sm-12" style="margin-top:30px; margin-bottom:30px;">
+                        <span>All Team Members assigned to task.</span>
+                    </div>
+                }
+                <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
+                    @if (Model.AssignedMembers.Count != 0)
+                    {
+                        <p><span><b>Assigned Users:</b></span></p>
+                        foreach (var asmember in Model.AssignedMembers)
+                        {
+                            <div class="col-md-4 col-sm-8">
+                                <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                        <button class="btn btn-secondary disabled">@asmember.Name</button>
+                                        <a href="@Url.Action("UnAssignUserFromEditBacklog","Project", new { backlogId = Model.Backlog.ProductBacklogId, memberId = asmember.MemberId }, Request.Url.Scheme)" class="btn btn-secondary">X</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="col-md- col-sm-10" style="margin-top:30px;">
+                            <b>The Task is not Assigned to any Member.</b>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
         @*Partial View haline getirip bu sayfada görüntüle*@
     </div>
     <div class="row">
-        <div class="col-md-6">
-            @*<div class="form-group">
-                @Html.Label("New Comment:")
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.EmptyComment.MemberComment,
-                   new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmptyComment.MemberComment, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
-                        <div class="btn-group mr-2" role="group" aria-label="First group">
-                            <input type="submit" value="Save" class="btn btn-primary" />
-                            <a href="@Url.Action("IndexBacklog", "Project", new { id = Model.Backlog.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Back To List</a>
-                            <a href="@Url.Action("AddComment","Project", new { backlogId = Model.Backlog.ProductBacklogId }, Request.Url.Scheme)" class="btn btn-primary"   >Add Comment</a>
-                        </div>
-                    </div>
-                    @*<input type="submit" value="Save" class="btn btn-primary" />*@
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10" style="align-content:center;">
+        <div class="col-md-10" style="align-content:center; margin-top:30px;">
             @if (Model.BacklogComments != null)
             {
                 @Html.Label("Backlog Comments:")
@@ -183,7 +174,6 @@
                     </div>
                 </div>
             </div>
-                    
                 }
             }
         </div>

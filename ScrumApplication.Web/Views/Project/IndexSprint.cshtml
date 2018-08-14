@@ -50,8 +50,8 @@
 
 @if (Model.SprintBacklogs.FirstOrDefault().Name != null)
 {
-    <div class="row" style="display:flex">
-        <div>
+    <div class="col-md-12">
+        <div class="col-md-12">
             @*<a href="~/Sprint/CreateTask/" style="margin-top:20px" class="btn btn-primary">Create Task</a>*@
             @*<a href="~/Sprint/EditSprint/" style="margin-top:20px" class="btn btn-primary">Edit Sprint</a>*@
             <table class="table table-hover">
@@ -117,16 +117,14 @@
                                     {
                                         <td>
                                             <button type="button" class="btn btn-secondary disabled btn-sm">
-                                                Assigned
+                                                You Are Assigned
                                             </button>
                                         </td>
                                         <td>
                                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                                 <div class="btn-group mr-2" role="group" aria-label="First group">
-                                                    <a href="@Url.Action("GiveIn", "Project", new { id = backlog.ProductBacklogId },
-                                            Request.Url.Scheme)" class="btn btn-secondary">Give In</a>
                                                     <a href="@Url.Action("CompleteBacklog", "Project", new { id = backlog.ProductBacklogId },
-                                        Request.Url.Scheme)" class="btn btn-success">Complete</a>
+                                        Request.Url.Scheme)" class="btn btn-sm btn-success">Complete</a>
                                                 </div>
                                             </div>
                                         </td>

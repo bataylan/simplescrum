@@ -32,6 +32,7 @@ namespace ScrumApplication.Entity.Models
         public virtual Epic Epic { get; set; }
         public virtual ICollection<Member> Members { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
+        public virtual ICollection<Activity> Activities { get; set; }
 
         public ProductBacklog()
         {

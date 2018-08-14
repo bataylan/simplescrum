@@ -20,6 +20,8 @@ namespace ScrumApplication.DAL.Repositories
                 db.ProductBacklogs.Add(newTask);
                 db.SaveChanges();
             }
+            ActivityRepository.ActivityCreator
+                    ("added " + newTask.Name+" to the project.", newTask.ProjectId, newTask.ProductBacklogId);
         }
 
         public static List<ProductBacklog> GetProductBacklogs(int projectId)

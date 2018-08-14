@@ -6,10 +6,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Project Home</h2>
+<h2>Project Backlogs</h2>
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <div class="dropdown">
+        @*<div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Dropdown button
             </button>
@@ -18,12 +18,14 @@
                 <a class="dropdown-item" href="#">Another action</a>
                 <a class="dropdown-item" href="#">Something else here</a>
             </div>
-        </div>
+        </div>*@
 
         <div class="btn-toolbar" style="margin-top:20px; margin-bottom:10px;" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group mr-2" role="group" aria-label="First group">
                 <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Create Task</a>
                 <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-primary">All Project Epics</a>
+                <a href="@Url.Action("ProjectHome", "Project", new { id = Model.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Project Home</a>
+
             </div>
             <div class="btn-group mr-2" role="group" aria-label="Second group">
                 <button type="button" class="btn btn-primary disabled">Sprints</button>
@@ -94,7 +96,7 @@
                                         }
                                         @if (@backlog.BacklogStatus.Equals(Status.Completed))
                                         {
-                                            <button class="btn btn-green btn-sm">Completed</button>
+                                            <button class="btn btn-success btn-sm">Completed</button>
                                         }
                                         @if (@backlog.BacklogStatus.Equals(Status.Tested))
                                         {
@@ -117,19 +119,21 @@
                                     {
                                         <td>
                                             <button type="button" class="btn btn-brown disabled btn-sm">
-                                                Assigned
+                                                You Are Assigned
                                             </button>
                                         </td>
                                         <td>
+                                            <a href="@Url.Action("EditBacklog", "Project", new { id = backlog.ProductBacklogId },
+                                        Request.Url.Scheme)" class="btn btn-sm btn-danger">Edit</a>
                                             <a href="@Url.Action("CompleteBacklog", "Project", new { id = backlog.ProductBacklogId },
-                                        Request.Url.Scheme)" class="btn btn-success">Complete</a>
+                                        Request.Url.Scheme)" class="btn btn-sm btn-success">Complete</a>
                                             @*<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                                                            <div class="btn-group mr-2" role="group" aria-label="First group">
-                                                                                <a href="@Url.Action("GiveIn", "Project", new { id = backlog.ProductBacklogId },
-                                            Request.Url.Scheme)" class="btn btn-secondary">Give In</a>
+                                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                                            <a href="@Url.Action("GiveIn", "Project", new { id = backlog.ProductBacklogId },
+        Request.Url.Scheme)" class="btn btn-secondary">Give In</a>
 
-                                                                            </div>
-                                                                        </div>*@
+                                        </div>
+                                    </div>*@
                                         </td>
 
                                     }
@@ -155,8 +159,7 @@
                                         <td>@backlog.SprintNo</td>
                                         <td>@backlog.Priority</td>
                                         <td>@backlog.StoryPoint</td>
-                                        <td></td>
-                                        <td></td>
+
                                         @if (TeamRepository.IsProjectManager(backlog.ProjectId))
                                         {
                                             <td>
@@ -168,7 +171,11 @@
                                         else
                                         {
                                             <td></td>
+                                            <td></td>
                                         }
+
+
+
                                     </tr>
                                 }
 

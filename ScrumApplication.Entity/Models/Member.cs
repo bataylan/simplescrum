@@ -31,6 +31,7 @@ namespace ScrumApplication.Entity.Models
         public virtual Company Company { get; set; }
         public virtual ICollection<ProductBacklog> ProductBacklogs { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
+        public virtual ICollection<Activity> Activities { get; set; }
 
     }
 }

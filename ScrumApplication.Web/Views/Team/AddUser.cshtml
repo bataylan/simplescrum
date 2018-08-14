@@ -1,36 +1,57 @@
-﻿@model ScrumApplication.Entity.Models.Member
+﻿@model ScrumApplication.Entity.Models.UserCommunityViewModel
 
 @{
     ViewBag.Title = "Add User To Team";
 }
 
 <h2>Add User</h2>
+<hr />
+
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>User</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.MemberId)
-    @Html.HiddenFor(model => model.TeamId)
-    <div class="form-group">
-        @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Member.MemberId)
+    @Html.HiddenFor(model => model.Member.TeamId)
+    <div class="row" style="margin-bottom:30px;">
+            <div class="col-md-6 col-sm-12">
+                <h4>Add User from Your Other Teams:</h4>
+                <div class="col-md-10 col-sm-12" style="margin-top:30px;">
+                    @foreach (var user in Model.UserCommunity)
+                    {
+                        <div class="col-md-10 col-sm-8">
+                            <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <button class="btn btn-primary disabled">@user.Name</button>
+                                    <a href="@Url.Action("AddUserTeamEdit","Team",
+                                            new { userId = user.UserId , teamId = Model.Member.TeamId },
+                                            Request.Url.Scheme)" class="btn btn-primary">+</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        <div class="form-horizontal col-md-6">
+            <h4>Add with E-Mail:</h4>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group" style="margin-top:30px;">
+                @Html.LabelFor(model => model.Member.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Member.Mail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Member.Mail, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-        </div>
-    </div>
-</div>
+
 }
 
 <div>
-    <a href="@Url.Action("Edit", "Team", new { id = Model.TeamId })" class="btn btn-default">Back To Edit</a>
+    <a href="@Url.Action("Edit", "Team", new { id = Model.Member.TeamId })" class="btn btn-primary">Back To Team Edit</a>
 </div>

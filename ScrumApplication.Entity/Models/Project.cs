@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace ScrumApplication.Entity.Models
     {
         public int ProjectId { get; set; }
         public string Name { get; set; }
+
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public int DayCount { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -24,6 +27,7 @@ namespace ScrumApplication.Entity.Models
         public virtual ICollection<ProductBacklog> ProductBacklogs { get; set; }
         public virtual ICollection<Epic> Epics { get; set; }
         public virtual Team Team { get; set; }
+        public virtual ICollection<Activity> Activities { get; set; }
 
         public Project ()
         {

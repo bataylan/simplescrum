@@ -135,38 +135,52 @@ namespace ScrumApplication.Web.Controllers
 
         public  ActionResult AddUser(int id)
         {
-            var newMember = new Member();
-            newMember.TeamId = id;
-
-            return View(newMember);
+            var newModel = new UserCommunityViewModel();
+            newModel.Member.TeamId = id;
+            int userId = UserRepository.GetUserId();
+            newModel.UserCommunity = TeamRepository.GetUserCommunity(userId);
+            return View(newModel);
         }
         [HttpPost]
-        public ActionResult AddUser(Member newMember)
+        public ActionResult AddUser(UserCommunityViewModel newModel)
         {
             if (UserRepository.IsUserSigned())
             {
-                var existUser = db.Users.FirstOrDefault(x => x.Mail == newMember.Mail);
-                TeamRepository.AddUserToTeam(existUser.UserId, newMember.TeamId, 3);
+                if(newModel.Member.Mail != null)
+                {
+                    var existUser = db.Users.FirstOrDefault(x => x.Mail == newModel.Member.Mail);
+                    TeamRepository.AddUserToTeam(existUser.UserId, newModel.Member.TeamId, 3);
+                }
 
-                return RedirectToAction("Edit", "Team", new { id = newMember.TeamId });
+                return RedirectToAction("Edit", "Team", new { id = newModel.Member.TeamId });
             }
 
             return RedirectToAction("Login", "User");
         }
 
+        public ActionResult AddUserTeamEdit(int userId, int teamId)
+        {
+            if(UserRepository.IsUserSigned())
+            {
+                TeamRepository.AddUserToTeam(userId, teamId, 3);
+                return RedirectToAction("AddUser", "Team", new { id = teamId });
+            }
+            return RedirectToAction("Login", "User");
+        }
+
         //Takımdan çıkmak için edit'e quit butonu eklenecek, cookie'den user id ve o anki takım id'si çekilecek.
 
-        public ActionResult RemoveMemberFromTeam(int id)
+        public ActionResult RemoveMemberFromTeam(int memberId)
         {
             //Takımdan kullanıcı çıkarmak için kullanıcının ve takımın id'si alınacak
 
             if (UserRepository.IsUserSigned())
             {
-                var existMember = db.Members.FirstOrDefault(x => x.MemberId == id);
-                var isDone = TeamRepository.RemoveMemberFromTeam(id, existMember.TeamId);
+                var existMember = db.Members.FirstOrDefault(x => x.MemberId == memberId);
+                var isDone = TeamRepository.RemoveMemberFromTeam(memberId);
                 if(isDone)
                 {
-                    return RedirectToAction("Edit", "Team" /*buraya takımın id'si eklenmeli*/);
+                    return RedirectToAction("Edit", "Team", new { id = existMember.TeamId });
                 }
                 //return'e alacağı id yazılmalı
                 return Content("User can't deleted.");

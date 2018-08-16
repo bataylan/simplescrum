@@ -13,9 +13,11 @@ namespace ScrumApplication.Entity.Models
         [Key]
         public int UserId { get; set; }
 
+        public string Name { get; set; }
+
         [Required]
         [Display(Name = "First Name")]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
@@ -29,9 +31,15 @@ namespace ScrumApplication.Entity.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+
         public int TotalPoint { get; set; }
 
         public virtual ICollection<Member> Members { get; set; }
         public virtual ICollection<Manager> Managers { get; set; }
+
+        public User()
+        {
+            Name = FirstName + " " + LastName.Substring(0, 1) + ".";
+        }
     }
 }

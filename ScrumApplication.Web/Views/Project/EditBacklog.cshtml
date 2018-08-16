@@ -24,6 +24,8 @@
                 @Html.HiddenFor(model => model.Backlog.ProjectId)
                 @Html.HiddenFor(model => model.Backlog.ProductBacklogId)
                 @Html.HiddenFor(model => model.Epic.ProjectId)
+                @Html.HiddenFor(model => model.ViewSortBy)
+                @Html.HiddenFor(model => model.ViewSprintNo)
 
 
                 <div class="form-group">
@@ -70,7 +72,7 @@
                             <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="First group">
                                     <input type="submit" value="Save" class="btn btn-primary" />
-                                    <a href="@Url.Action("IndexBacklog", "Project", new { id = Model.Backlog.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Back To List</a>
+                                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.Backlog.ProjectId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy }, Request.Url.Scheme)" class="btn btn-primary">Back To List</a>
                                     <a href="@Url.Action("CommentBacklog","Project", new { backlogId = Model.Backlog.ProductBacklogId }, Request.Url.Scheme)" class="btn btn-primary">Add Comment</a>
                                 </div>
                             </div>

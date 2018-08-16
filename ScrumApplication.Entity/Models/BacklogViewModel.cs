@@ -16,6 +16,9 @@ namespace ScrumApplication.Entity.Models
         public bool IsUserAssigned { get; set; }
         public MemberViewModel AssignMember { get; set; }
         public List<Comment> BacklogComments { get; set; }
+        public int ViewSprintNo { get; set; }
+        public int ViewSortBy { get; set; }
+
 
         public BacklogViewModel()
         {

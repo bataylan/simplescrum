@@ -15,6 +15,7 @@ namespace ScrumApplication.Entity.Models
         public List<ProductBacklog> ProductBacklogs { get; set; }
         public int CurrentSprintNo { get; set; }
         public int TotalSprintCount { get; set; }
-
+        public int ViewSprintNo { get; set; }
+        public int ViewSortBy { get; set; }
     }
 }

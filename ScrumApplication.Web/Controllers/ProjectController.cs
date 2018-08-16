@@ -31,28 +31,55 @@ namespace ScrumApplication.Web.Controllers
             return View(teamProjects);
         }
 
-        public ActionResult Create(int teamId)
+        public ActionResult Create(int? teamId, int? from)
         {
-            var newProject = new Project();
-            newProject.TeamId = teamId;
-            return View(newProject);
+            var existProjectModel = new ProjectEditViewModel();
+            if(teamId.HasValue)
+            {
+                existProjectModel.Project.TeamId = teamId;
+            }
+            int userId = UserRepository.GetUserId();
+            var userCommunityTeams = TeamRepository.GetTeamsForManager(userId);
+            existProjectModel.UserTeams = userCommunityTeams;
+
+            return View(existProjectModel);
         }
 
         [HttpPost]
-        public ActionResult Create(Project newProject)
+        public ActionResult Create(ProjectEditViewModel existProjectModel)
         {
             if (UserRepository.IsUserSigned())
             {
-                var existTeam = new Team();
-                newProject.EndDate = newProject.CreatedDate.AddDays(newProject.DayCount);
+                //Define project informations
+                var newProject = new Project();
+                newProject = existProjectModel.Project;
+                if (existProjectModel.Project.EndDate <= existProjectModel.Project.CreatedDate)
+                {
+                    return Content("Please enter an upward EndDate from today's date.");
+                }
                 db.Projects.Add(newProject);
                 db.SaveChanges();
+
                 ActivityRepository.ActivityCreator
                     ("created " + newProject.Name + " project.", newProject.ProjectId, null);
-                return RedirectToAction("Index", "Project", new { id = newProject.TeamId });
+
+                return RedirectToAction("Index", "Project", new { id = existProjectModel.Project.TeamId });
             }
 
             return RedirectToAction("Login", "User");
+
+            //if (UserRepository.IsUserSigned())
+            //{
+            //    var existTeam = new Team();
+            //    newProject.EndDate = newProject.CreatedDate.AddDays(newProject.DayCount);
+            //    db.Projects.Add(newProject);
+            //    db.SaveChanges();
+            //    ActivityRepository.ActivityCreator
+            //        ("created " + newProject.Name + " project.", newProject.ProjectId, null);
+            //    return RedirectToAction("Index", "Project", new { id = newProject.TeamId });
+            //}
+
+            //return RedirectToAction("Login", "User");
         }
 
         //Done methodunu yaz(projectId alacak)
@@ -65,37 +92,19 @@ namespace ScrumApplication.Web.Controllers
 
         //RemoveEpic methodunu yaz(EpicId alacak)
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int? from)
         {
             var existProjectModel = new ProjectEditViewModel();
             existProjectModel.Project = db.Projects.FirstOrDefault(x => x.ProjectId == id);
 
             int userId = UserRepository.GetUserId();
 
-            if (existProjectModel.Project != null && existProjectModel.Project.TeamId != 0)
-            {
-                var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existProjectModel.Project.TeamId);
-
-                if (existTeam != null && existTeam.TeamId != 0)
-                {
-                    existProjectModel.AssignedTeam = existTeam;
-
-                    var userTeams = new List<Team>();
-                    userTeams.Add(existProjectModel.AssignedTeam);
-                    var userCommunityTeams = TeamRepository.GetTeams(userId);
-                    userTeams.AddRange(userCommunityTeams);
-
-                    existProjectModel.UserTeams = userTeams
-                        .GroupBy(x => x.TeamId)
-                        .Select(x => x.First())
-                        .ToList();
-                }
-            }
-            else
-            {
-                var userCommunityTeams = TeamRepository.GetTeams(userId);
-                existProjectModel.UserTeams = userCommunityTeams;
-            }
+            var userCommunityTeams = TeamRepository.GetTeamsForManager(userId);
+            existProjectModel.UserTeams = userCommunityTeams;
+            existProjectModel.UserTeams = existProjectModel.UserTeams
+                    .GroupBy(x => x.TeamId)
+                    .Select(x => x.First())
+                    .ToList();
 
             return View(existProjectModel);
         }
@@ -109,9 +118,23 @@ namespace ScrumApplication.Web.Controllers
                 //Define project informations
                 var _existProject = new Project();
                 _existProject = db.Projects.FirstOrDefault(x => x.ProjectId == existProjectModel.Project.ProjectId);
+                _existProject.TeamId = existProjectModel.Project.TeamId;
+                
+                if(_existProject.TeamId != existProjectModel.AssignedTeam.TeamId)
+                {
+                    var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == _existProject.TeamId);
+
+                    ActivityRepository.ActivityCreator
+                    ("changed " + _existProject.Name + " project team to the team " + existTeam.Name + ".", _existProject.ProjectId, null);
+                }
                 _existProject.Name = existProjectModel.Project.Name;
                 _existProject.DayCount = existProjectModel.Project.DayCount;
-                _existProject.EndDate = existProjectModel.Project.CreatedDate.AddDays(existProjectModel.Project.DayCount);
+                if(existProjectModel.Project.EndDate > existProjectModel.Project.CreatedDate)
+                {
+                    _existProject.EndDate = existProjectModel.Project.EndDate;
+                    _existProject.DayCount = _existProject.EndDate.Subtract(DateTime.Now).Days;
+                }
+                //_existProject.EndDate = existProjectModel.Project.CreatedDate.AddDays(existProjectModel.Project.DayCount);
                 _existProject.DefaultSprintTime = existProjectModel.Project.DefaultSprintTime;
                 db.SaveChanges();
 
@@ -137,7 +160,7 @@ namespace ScrumApplication.Web.Controllers
             return View(Epics);
         }
 
-        public ActionResult CommentBacklog(int backlogId)
+        public ActionResult CommentBacklog(int backlogId, int? from)
         {
             var newComment = new Comment();
             newComment.ProductBacklogId = backlogId;
@@ -169,9 +192,15 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("EditBacklog", new { id = newComment.ProductBacklogId });
         }
 
-        public ActionResult EditBacklog(int id)
+        public ActionResult EditBacklog(int id, int? from, int? sprintNo, int? sortBy)
         {
             var backlogModel = ProjectRepository.GetBacklogViewModel(id);
+            if(sprintNo.HasValue && sortBy.HasValue)
+            {
+                backlogModel.ViewSortBy = sortBy ?? default(int);
+                backlogModel.ViewSprintNo = sprintNo ?? default(int);
+            }
+
             return View(backlogModel);
         }
         [HttpPost]
@@ -208,7 +237,7 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("EditBacklog", new { id = _existBacklog.ProductBacklogId });
         }
 
-        public ActionResult AssignBacklog(int memberId, int backlogId)
+        public ActionResult AssignBacklog(int memberId, int backlogId, int? from)
         {
             if(UserRepository.IsUserSigned())
             {
@@ -274,7 +303,7 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        public ActionResult GiveIn(int id)
+        public ActionResult GiveIn(int id, int? from)
         {
             if(UserRepository.IsUserSigned())
             {
@@ -299,7 +328,7 @@ namespace ScrumApplication.Web.Controllers
 
         }
 
-        public ActionResult CreateBacklog(int id)
+        public ActionResult CreateBacklog(int id, int? from)
         {
             var backlogModel = new BacklogViewModel();
             backlogModel.Backlog.ProjectId = id;
@@ -340,27 +369,29 @@ namespace ScrumApplication.Web.Controllers
             return Content("There is no project with that id.");
         }
 
-        public ActionResult IndexBacklog(int id)
+        public ActionResult IndexBacklog(int projectId, int sprintNo = 0, int sortBy = 0)
         {
             if (UserRepository.IsUserSigned())
             {
-                var existProject = db.Projects.FirstOrDefault(x => x.ProjectId == id);
+                var existProject = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
                 if (existProject != null)
                 {
                     var projectHVM = new ProjectHomeViewModel
                     {
-                        ProjectId = id,
+                        ProjectId = projectId,
                         ProjectName = existProject.Name,
                         TeamId = existProject.TeamId ?? default(int),
                         CurrentSprintNo = existProject.CurrentSprintNo,
-                        TotalSprintCount = ProjectRepository.GetSprintCount(id),
-                        ProductBacklogs = ProjectRepository.GetProjectBacklogs(id)
+                        TotalSprintCount = ProjectRepository.GetSprintCount(projectId),
+                        ProductBacklogs = ProjectRepository.GetProjectBacklogs(projectId, sprintNo, sortBy),
+                        ViewSprintNo = sprintNo,
+                        ViewSortBy = sortBy
                     };
 
                     if (projectHVM.ProductBacklogs.Count == 0)
                     {
                         var backlog = new ProductBacklog();
-                        backlog.ProjectId = id;
+                        backlog.ProjectId = projectId;
                         projectHVM.ProductBacklogs.Add(backlog);
                     }
                     return View(projectHVM);
@@ -370,7 +401,26 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        public ActionResult CreateEpic(int id)
+        public ActionResult IndexSprint(int projectId, int sprintNo)
+        {
+
+            var existProject = new Project();
+            existProject = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+            var sprintModel = new SprintViewModel
+            {
+                ProjectId = projectId,
+                ProjectCurrentSprint = existProject.CurrentSprintNo,
+                SprintCount = ProjectRepository.GetSprintCount(projectId),
+                SprintNo = sprintNo,
+                SprintBacklogs = ProjectRepository.GetSprintBacklogs(projectId, sprintNo)
+            };
+
+
+
+            return View(sprintModel);
+        }
+
+        public ActionResult CreateEpic(int id, int? from)
         {
             var newEpic = new Epic();
             newEpic.ProjectId = id;
@@ -391,7 +441,7 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("IndexEpic", new { id = newEpic.ProjectId });
         }
 
-        public ActionResult DeleteEpic(int id)
+        public ActionResult DeleteEpic(int id, int? from)
         {
             var existTask = new Epic();
             existTask = db.Epics.FirstOrDefault(x => x.EpicId == id);
@@ -405,7 +455,7 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("IndexEpic",new { id = existTask.ProjectId });
         }
 
-        public ActionResult EditEpic(int id)
+        public ActionResult EditEpic(int id, int? from)
         {
             Epic existTask = new Epic();
             existTask = db.Epics.FirstOrDefault(x => x.EpicId == id);
@@ -441,7 +491,7 @@ namespace ScrumApplication.Web.Controllers
                    ("completed " + existBacklog.Name + " backlog.",
                    existBacklog.ProjectId, existBacklog.ProductBacklogId);
 
-                    return RedirectToAction("IndexBacklog", "Project", new { id = existBacklog.ProjectId });
+                    return RedirectToAction("IndexBacklog", "Project", new { projectId = existBacklog.ProjectId });
 
                 }
                 return Content("There are errors, you cannot unassign from this backlog.");
@@ -566,20 +616,6 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("Login", "User");
         }
         
-        public ActionResult IndexSprint(int projectId, int sprintNo)
-        {
-            
-            var existProject = new Project();
-            existProject = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
-            var sprintModel = new SprintViewModel
-            {
-                ProjectId = projectId,
-                ProjectCurrentSprint = existProject.CurrentSprintNo,
-                SprintCount = ProjectRepository.GetSprintCount(projectId),
-                SprintNo = sprintNo,
-                SprintBacklogs = ProjectRepository.GetSprintBacklogs(projectId, sprintNo)
-            };
-            return View(sprintModel);
-        }
+        
     }
 }

@@ -10,6 +10,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(x=>x.ProjectId)
+    @Html.HiddenFor(x=>x.from)
     <div>
         <div class="form-horizontal .col-sm-8 ">
             <h4>Team</h4>

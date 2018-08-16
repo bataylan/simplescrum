@@ -225,6 +225,42 @@ namespace ScrumApplication.DAL.Repositories
             return _teamList;
         }
 
+        public static List<Team> GetTeamsForManager(int userId)
+        {
+            var _teamList = new List<Team>();
+            var existUser = new User();
+            var userTeamsWithManagerRoleList = new List<Team>();
+            using (var db = new ScrumApplicationDbContext())
+            {
+                if (userId != 0)
+                {
+                    var query = from member in db.Members
+                                where member.UserId == userId
+                                select member.Team;
+                    _teamList = query.ToList();
+
+                    
+                    foreach (var team in _teamList)
+                    {
+                        foreach (var member in db.Members)
+                        {
+                            if (member.TeamId == team.TeamId && member.UserId == userId)
+                            {
+                                if(member.RoleCode < 3)
+                                {
+                                    userTeamsWithManagerRoleList.Add(team);
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+
+            }
+
+            return userTeamsWithManagerRoleList;
+        }
+
         public static bool ChangeManager(int memberId, int teamId)
         {
             using (var db = new ScrumApplicationDbContext())

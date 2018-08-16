@@ -41,7 +41,7 @@
                                 <div class="btn-group-sm mr-2" role="group" aria-label="First group">
                                     <a href="@Url.Action("ProjectHome", "Project", new { id = project.ProjectId },
                                 Request.Url.Scheme)" class="btn btn-sm btn-light">Project Home</a>
-                                    <a href="@Url.Action("IndexBacklog", "Project", new { id = project.ProjectId },
+                                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = project.ProjectId },
                                 Request.Url.Scheme)" class="btn btn-sm btn-primary">Backlogs</a>
                                     <a href="@Url.Action("IndexEpic", "Project", new { id = project.ProjectId },
                                 Request.Url.Scheme)" class="btn btn-sm btn-success">Epics</a>

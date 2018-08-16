@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ScrumApplication.DAL.Repositories
 {
-    public class ProjectRepository
+    public static class ProjectRepository
     {
         public static void AddProject(string name)
         {
@@ -146,20 +146,41 @@ namespace ScrumApplication.DAL.Repositories
             
         }
 
-        public static List<ProductBacklog> GetProjectBacklogs(int projectId)
+        public static List<ProductBacklog> GetProjectBacklogs(int projectId, int sortBy = 0)
         {
             var projectBacklogs = new List<ProductBacklog>();
             using (var db = new ScrumApplicationDbContext())
             {
                 var query = from backlog in db.ProductBacklogs
                             where backlog.ProjectId == projectId
-                            orderby backlog.Done ascending, backlog.EpicId ascending
                             select backlog;
-                projectBacklogs = query.ToList();
+                projectBacklogs = query.ToList().SortBacklogs(sortBy);
             }
             return projectBacklogs;
         }
 
+        public static List<ProductBacklog> GetProjectBacklogs(int projectId, int sprintNo, int sortBy = 0)
+        {
+            var projectBacklogs = new List<ProductBacklog>();
+            using (var db = new ScrumApplicationDbContext())
+            {
+                if(sprintNo == 0)
+                {
+                    var query = from backlog in db.ProductBacklogs
+                                where backlog.ProjectId == projectId
+                                select backlog;
+                    projectBacklogs = query.ToList().SortBacklogs(sortBy);
+                }
+                else
+                {
+                    var query = from backlog in db.ProductBacklogs
+                                where backlog.ProjectId == projectId && backlog.SprintNo == sprintNo
+                                select backlog;
+                    projectBacklogs = query.ToList().SortBacklogs(sortBy);
+                }
+            }
+            return projectBacklogs;
+        }
         public static List<ProductBacklog> GetSprintBacklogs(int projectId, int sprintNo)
         {
             var sprintBacklogs = new List<ProductBacklog>();
@@ -167,12 +188,44 @@ namespace ScrumApplication.DAL.Repositories
             {
                 var query = from backlog in db.ProductBacklogs
                             where backlog.ProjectId == projectId && backlog.SprintNo == sprintNo
-                            orderby backlog.Priority ascending , backlog.Done ascending
+                            orderby backlog.Priority ascending, backlog.Done ascending
                             select backlog;
                 sprintBacklogs = query.ToList();
             }
             return sprintBacklogs;
         }
+        public static List<ProductBacklog> SortBacklogs(this List<ProductBacklog> list, int sortBy)
+        {
+            var existList = new List<ProductBacklog>();
+
+            if(sortBy == (int)BacklogSort.PriorityAsc)
+            {
+                existList = list.OrderBy(x => x.Done).ThenBy(x=>x.Priority).ToList();
+            }
+            else if(sortBy == (int)BacklogSort.PriorityDesc)
+            {
+                existList = list.OrderBy(x => x.Done).ThenByDescending(x => x.Priority).ToList();
+            }
+            else if(sortBy == (int)BacklogSort.SprintAsc)
+            {
+                existList = list.OrderBy(x => x.Done).ThenBy(x => x.SprintNo).ToList();
+            }
+            else if(sortBy == (int)BacklogSort.SprintDesc)
+            {
+                existList = list.OrderBy(x => x.Done).ThenByDescending(x => x.SprintNo).ToList();
+            }
+            else if(sortBy == (int)BacklogSort.StoryPointAsc)
+            {
+                existList = list.OrderBy(x => x.Done).ThenBy(x => x.StoryPoint).ToList();
+            }
+            else
+            {
+                existList = list.OrderBy(x => x.Done).ThenByDescending(x => x.StoryPoint).ToList();
+            }
+            return existList;
+        }
+
+        
 
         public static BacklogViewModel GetBacklogViewModel(int productBacklogId)
         {

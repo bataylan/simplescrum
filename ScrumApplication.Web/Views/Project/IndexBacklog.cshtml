@@ -7,9 +7,9 @@
 }
 
 <h2>Project Backlogs</h2>
-<div class="row">
-    <div class="col-md-12 col-sm-12">
-        @*<div class="dropdown">
+
+<div class="row col-md-12 col-sm-12">
+    @*<div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Dropdown button
             </button>
@@ -20,64 +20,109 @@
             </div>
         </div>*@
 
-        <div class="btn-toolbar" style="margin-top:20px; margin-bottom:10px;" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Create Task</a>
-                <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-primary">All Project Epics</a>
-                <a href="@Url.Action("ProjectHome", "Project", new { id = Model.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Project Home</a>
+    @*Button Toolbar that includes Create Task, All Project Epics, Sprint and Sort buttons*@
+    <div class="row col-md-12" style="margin-top:20px; margin-bottom:10px; align-items:center;">
 
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn btn-group mr-2" role="group" aria-label="First group">
+                <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId },
+                            Request.Url.Scheme)" class="btn btn-primary">Create Task</a>
+                <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-success">All Project Epics</a>
+                <a href="@Url.Action("ProjectHome", "Project", new { id = Model.ProjectId },
+                            Request.Url.Scheme)" class="btn btn-primary">Project Home</a>
             </div>
-            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button type="button" class="btn btn-primary disabled">Sprints</button>
+            <div class="btn btn-group mr-2" role="group" aria-label="Second group">
+                @if (Model.ViewSprintNo == 0)
+                {
+                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId },
+                            Request.Url.Scheme)" class="btn btn-primary disabled">Sprints</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId },
+                            Request.Url.Scheme)" class="btn btn-primary">Sprints</a>
+                }
+
                 @for (int i = 1; i <= Model.TotalSprintCount; i++)
                 {
-                    if (i < Model.CurrentSprintNo)
+                    if (Model.ViewSprintNo == i)
                     {
-                        <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-secondary">@i</a>
-                    }
-                    else if (i == Model.CurrentSprintNo)
-                    {
-                        <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-success">@i</a>
+                        <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
+                            class="btn btn-primary disabled">@i</a>
                     }
                     else
                     {
-                        <a href="~/Project/IndexSprint?projectId=@Model.ProjectId&sprintNo=@i" type="button" class="btn btn-primary">@i</a>
+                        if (i < Model.CurrentSprintNo)
+                        {
+                            <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
+                                class="btn btn-secondary">@i</a>
+                        }
+                        else if (i == Model.CurrentSprintNo)
+                        {
+                            <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
+                                class="btn btn-success">@i</a>
+                        }
+                        else
+                        {
+                            <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
+                                class="btn btn-primary">@i</a>
+                        }
                     }
                 }
             </div>
         </div>
+        <div class="btn-group dropright">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sort By
+            </button>
+            <div class="dropdown-menu">
+                <!-- Dropdown menu links -->
+                <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@Model.ViewSprintNo&sortBy=@((int)BacklogSort.PriorityAsc)"
+                   class="dropdown-item">Priority Asc</a>
+                <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@Model.ViewSprintNo&sortBy=@((int)BacklogSort.PriorityDesc)"
+                   class="dropdown-item">Priority Desc</a>
+                <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@Model.ViewSprintNo&sortBy=@((int)BacklogSort.SprintAsc)"
+                   class="dropdown-item">Sprint Asc</a>
+                <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@Model.ViewSprintNo&sortBy=@((int)BacklogSort.SprintDesc)"
+                   class="dropdown-item">Sprint Desc</a>
+                <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@Model.ViewSprintNo&sortBy=@((int)BacklogSort.StoryPointAsc)"
+                   class="dropdown-item">Story Point Asc</a>
+                <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@Model.ViewSprintNo&sortBy=@((int)BacklogSort.StoryPointDesc)"
+                   class="dropdown-item">Story Point Desc</a>
+            </div>
+        </div>
+    </div>
 
 
 
-        @if (Model.ProductBacklogs.FirstOrDefault().Name != null)
-        {
-            <div class="row">
-                <div class="col-md-12">
-                    @*<a href="~/Sprint/CreateTask/" style="margin-top:20px" class="btn btn-primary">Create Task</a>*@
-                    @*<a href="~/Sprint/EditSprint/" style="margin-top:20px" class="btn btn-primary">Edit Sprint</a>*@
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Backlogs</th>
-                                <th scope="col">Epic Name</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Sprint</th>
-                                <th scope="col">Priority</th>
-                                <th scope="col">Story Point</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var backlog in Model.ProductBacklogs)
+    @if (Model.ProductBacklogs.FirstOrDefault().Name != null)
+    {
+        <div class="row col-md-12 col-sm-12">
+            <div class="col-md-12">
+                @*<a href="~/Sprint/CreateTask/" style="margin-top:20px" class="btn btn-primary">Create Task</a>*@
+                @*<a href="~/Sprint/EditSprint/" style="margin-top:20px" class="btn btn-primary">Edit Sprint</a>*@
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Backlogs</th>
+                            <th scope="col">Epic Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Sprint</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Story Point</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var backlog in Model.ProductBacklogs)
+                        {
+                            if (!backlog.Done)
                             {
-                                if (!backlog.Done)
-                                {
-                                    <tr>
-                                        <th scope="row">
-                                            <a href="@Url.Action("EditBacklog", "Project",
-                                            new { id = backlog.ProductBacklogId },
+                                <tr>
+                                    <th scope="row">
+                                        <a href="@Url.Action("EditBacklog", "Project",
+                                            new { id = backlog.ProductBacklogId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy },
                                         Request.Url.Scheme)">@backlog.Name</a>
                                     </th>
                                     <td>@backlog.EpicName</td>
@@ -123,9 +168,20 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("EditBacklog", "Project", new { id = backlog.ProductBacklogId },
+                                            <div class="btn-group">
+                                                <a href="@Url.Action("EditBacklog", "Project",
+                                                    new { id = backlog.ProductBacklogId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy },
                                         Request.Url.Scheme)" class="btn btn-sm btn-danger">Edit</a>
-                                            <a href="@Url.Action("CompleteBacklog", "Project", new { id = backlog.ProductBacklogId },
+                                                <button type="button" class="btn btn-sm btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="sr-only">Edit Dropdown</span>
+                                                </button>
+
+                                            </div>
+                                            @*<a href="@Url.Action("EditBacklog", "Project",
+                    new { id = backlog.ProductBacklogId },
+        Request.Url.Scheme)" class="btn btn-sm btn-danger">Edit</a>*@
+                                            <a href="@Url.Action("CompleteBacklog", "Project",
+                                                    new { id = backlog.ProductBacklogId },
                                         Request.Url.Scheme)" class="btn btn-sm btn-success">Complete</a>
                                             @*<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                         <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -148,44 +204,43 @@
                             }
 
                         }
-                            @foreach (var backlog in Model.ProductBacklogs)
+                        @foreach (var backlog in Model.ProductBacklogs)
+                        {
+                            if (backlog.Done)
                             {
-                                if (backlog.Done)
-                                {
-                                    <tr class="table-active">
-                                        <td>@backlog.Name</td>
-                                        <td>@backlog.EpicName</td>
-                                        <td>@backlog.BacklogStatus</td>
-                                        <td>@backlog.SprintNo</td>
-                                        <td>@backlog.Priority</td>
-                                        <td>@backlog.StoryPoint</td>
+                                <tr class="table-active">
+                                    <td>@backlog.Name</td>
+                                    <td>@backlog.EpicName</td>
+                                    <td>@backlog.BacklogStatus</td>
+                                    <td>@backlog.SprintNo</td>
+                                    <td>@backlog.Priority</td>
+                                    <td>@backlog.StoryPoint</td>
 
-                                        @if (TeamRepository.IsProjectManager(backlog.ProjectId))
-                                        {
-                                            <td>
-                                                <a href="@Url.Action("GreenBacklog", "Project", new { id = backlog.ProductBacklogId },
+                                    @if (TeamRepository.IsProjectManager(backlog.ProjectId))
+                                    {
+                                        <td>
+                                            <a href="@Url.Action("GreenBacklog", "Project",
+                                                        new { id = backlog.ProductBacklogId },
                                             Request.Url.Scheme)" class="btn btn-outline-success">Green</a>
-                                            </td>
-                                            <td></td>
-                                        }
-                                        else
-                                        {
-                                            <td></td>
-                                            <td></td>
-                                        }
+                                        </td>
+                                        <td></td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                    }
 
 
 
-                                    </tr>
-                                }
-
+                                </tr>
                             }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
-    </div>
-</div>
 
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
 

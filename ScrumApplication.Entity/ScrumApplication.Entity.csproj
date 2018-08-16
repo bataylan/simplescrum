@@ -258,6 +258,7 @@
     <Compile Include="Models\TeamCreateViewModel.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserCommunityViewModel.cs" />
+    <Compile Include="Models\ViewEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

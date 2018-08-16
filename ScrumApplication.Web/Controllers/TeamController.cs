@@ -31,12 +31,18 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("Index", "Project",new {id = id });
         }
                
-        public ActionResult Create(int? projectId)
+        public ActionResult Create(int? projectId, int? from)
         {
             var newTeamModel = new TeamCreateViewModel();
+            
             if(projectId.HasValue)
             {
                 newTeamModel.ProjectId = projectId ?? default(int);
+            }
+
+            if(from.HasValue)
+            {
+                newTeamModel.from = (ViewEnum)from;
             }
                         
             return View(newTeamModel);
@@ -48,8 +54,6 @@ namespace ScrumApplication.Web.Controllers
             if (UserRepository.IsUserSigned())
             {
                 int userId = UserRepository.GetUserId();
-                
-
                 db.Teams.Add(newTeamModel.Team);
                 db.SaveChanges();
                 TeamRepository.AddUserToTeam(userId, newTeamModel.Team.TeamId, 2);
@@ -59,8 +63,19 @@ namespace ScrumApplication.Web.Controllers
                     var existProject = db.Projects.FirstOrDefault(x => x.ProjectId == newTeamModel.ProjectId);
                     existProject.TeamId = newTeamModel.Team.TeamId;
                     db.SaveChanges();
+                }
 
-                    return RedirectToAction("Edit", "Project", new { id = existProject.ProjectId });
+                if(newTeamModel.from == ViewEnum.HomeIndex)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if(newTeamModel.from == ViewEnum.ProjectCreate)
+                {
+                    return RedirectToAction("Create", "Project");
+                }
+                else if(newTeamModel.from == ViewEnum.ProjectEdit)
+                {
+                    return RedirectToAction("Edit", "Project", new { id = newTeamModel.ProjectId });
                 }
 
                 return RedirectToAction("Index", "Team", new { id = userId });
@@ -187,17 +202,16 @@ namespace ScrumApplication.Web.Controllers
         public ActionResult RemoveMemberFromTeam(int memberId)
         {
             //Takımdan kullanıcı çıkarmak için kullanıcının ve takımın id'si alınacak
-
-            if (UserRepository.IsUserSigned())
+            var existMember = db.Members.FirstOrDefault(x => x.MemberId == memberId);
+            if (UserRepository.IsUserSigned() && TeamRepository.IsTeamManager(existMember.TeamId))
             {
-                var existMember = db.Members.FirstOrDefault(x => x.MemberId == memberId);
                 var isDone = TeamRepository.RemoveMemberFromTeam(memberId);
                 if(isDone)
                 {
                     return RedirectToAction("Edit", "Team", new { id = existMember.TeamId });
                 }
                 //return'e alacağı id yazılmalı
-                return Content("User can't deleted.");
+                return Content("You can't remove user from this team, you are not team manager.");
             }
 
             return RedirectToAction("Login", "User");

@@ -10,7 +10,7 @@
     <div class="btn-group mr-2" role="group" aria-label="First group">
         <a href="@Url.Action("Edit", "Project", new { id = Model.Project.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Edit</a>
         <a href="~/Project/IndexEpic/@Model.Project.ProjectId" class="btn btn-primary">All Project Epics</a>
-        <a href="@Url.Action("IndexBacklog", "Project", new { id = Model.Project.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Backlogs</a>
+        <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.Project.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Backlogs</a>
 
     </div>
 </div>

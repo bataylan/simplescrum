@@ -43,21 +43,29 @@
                 <th>Name</th>
                 <th>Mail</th>
             </tr>
+            @if (TeamRepository.IsTeamManager(Model.TeamId))
+            {
+
+            }
             @foreach (var user in Model.Members.ToList())
             {
                 if (user.RoleCode >= 3)
                 {
-                    <tr>
-                        <td style="margin-left:10px; margin-top:10px;">
-                            @user.Name
-                        </td>
-                        <td style="">
-                            @user.Mail
-                        </td>
-                        <td>
-                            <a href="@Url.Action("RemoveMemberFromTeam","Team", new { memberId = user.MemberId })" class="btn-sm btn-danger">X</a>
-                        </td>
-                    </tr>
+            <tr>
+                <td style="margin-left:10px; margin-top:10px;">
+                    @user.Name
+                </td>
+                <td style="">
+                    @user.Mail
+                </td>
+                @if (TeamRepository.IsTeamManager(Model.TeamId))
+                {
+                    <td>
+                        <a href="@Url.Action("RemoveMemberFromTeam","Team", new { memberId = user.MemberId })" class="btn-sm btn-danger">X</a>
+                    </td>
+                }
+
+            </tr>
                 }
                 else
                 {

@@ -10,11 +10,13 @@ namespace ScrumApplication.Entity.Models
     {
         public Team Team { get; set; }
         public int ProjectId { get; set; }
+        public ViewEnum from { get; set; }
 
         public TeamCreateViewModel()
         {
             Team = new Team();
             ProjectId = 0;
+            from = ViewEnum.TeamIndex;
         }
     }
 }

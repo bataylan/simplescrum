@@ -258,7 +258,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Project\IndexSprint.cshtml" />
     <Content Include="Views\Project\IndexBacklog.cshtml" />
     <Content Include="Views\Project\CommentBacklog.cshtml" />
   </ItemGroup>

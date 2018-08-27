@@ -256,7 +256,6 @@
     <Compile Include="Models\ProjectEditViewModel.cs" />
     <Compile Include="Models\ProjectHomeViewModel.cs" />
     <Compile Include="Models\ProjectViewModel.cs" />
-    <Compile Include="Models\Sprint.cs" />
     <Compile Include="Models\ProductBacklog.cs" />
     <Compile Include="Models\SprintViewModel.cs" />
     <Compile Include="Models\Team.cs" />

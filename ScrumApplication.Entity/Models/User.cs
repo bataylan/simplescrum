@@ -24,7 +24,7 @@ namespace ScrumApplication.Entity.Models
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "User Mail")]
+        [Display(Name = "Mail")]
         public string Mail { get; set; }
 
         [Required]

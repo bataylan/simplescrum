@@ -11,6 +11,7 @@ namespace ScrumApplication.Entity.Models
     public class Member
     {
         [Key]
+        [Display(Name = "Member")]
         public int MemberId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]

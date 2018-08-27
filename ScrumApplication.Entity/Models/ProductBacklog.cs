@@ -17,15 +17,23 @@ namespace ScrumApplication.Entity.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public int Priority { get; set; }
+        [Display(Name = "Story Point")]
         public int StoryPoint { get; set; }
+        [Display(Name = "Is Done")]
         public bool Done { get; set; }
+        [Display(Name = "Backlog Status")]
         public Status BacklogStatus { get; set; }
+        [Display(Name = "Acceptence Criteria")]
         public string AcceptanceCriteria { get; set; }
+        [Display(Name = "Sprint No")]
         public int SprintNo { get; set; }
+        [Display(Name = "Epic Name")]
         public string EpicName { get; set; }
 
+        [Display(Name = "Project")]
         public int ProjectId { get; set; }
 
+        [Display(Name = "Epic")]
         public int? EpicId { get; set; }
 
         public virtual Project Project { get; set; }

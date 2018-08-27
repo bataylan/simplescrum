@@ -14,15 +14,27 @@ namespace ScrumApplication.Entity.Models
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+
+        [Display(Name = "Day Count")]
         public int DayCount { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Created Date")]
         public DateTime CreatedDate { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
+
+        [Display(Name = "Sprint Period")]
         public int DefaultSprintTime { get; set; }
+
+        [Display(Name = "Active Sprint No")]
         public int CurrentSprintNo { get; set; }
+
+        [Display(Name = "Is Done")]
         public bool IsDone { get; set; }
 
         public int? TeamId { get; set; }

@@ -27,7 +27,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Backlog.SprintNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10" style="margin-bottom:5px;">
+                        @Html.DisplayNameFor(model => model.Backlog.SprintNo)
+                    </div>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Backlog.SprintNo, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Backlog.SprintNo, "", new { @class = "text-danger" })
@@ -41,7 +43,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Backlog.StoryPoint, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10" style="margin-bottom:5px;">
+                        @Html.DisplayNameFor(model => model.Backlog.StoryPoint)
+                    </div>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Backlog.StoryPoint,
                        new { htmlAttributes = new { @class = "form-control" } })
@@ -59,22 +63,26 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Backlog.EpicId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10" style="margin-bottom:5px;">
+                        @Html.DisplayNameFor(model => model.Backlog.EpicId)
+                    </div>
                     <div class="col-md-10">
                         @Html.DropDownListFor(x => Model.Backlog.EpicId, new SelectList(Model.ProjectEpics, "EpicId", "Name"),
                        htmlAttributes: new { @class = "form-control", id = "EpicId" })
 
                         @*@Html.DropDownListFor(model => model.Backlog.EpicId,
-                new SelectList(Model.ProjectEpics, "EpicId", "Name"), "Select Epic",
-                new { htmlAttributes = new { @class = "form-control" } })*@
+            new SelectList(Model.ProjectEpics, "EpicId", "Name"), "Select Epic",
+            new { htmlAttributes = new { @class = "form-control" } })*@
                         @Html.ValidationMessageFor(model => model.Backlog.EpicId, "", new { @class = "text-danger" })
                         @*<a href="@Url.Action("CreateEpic", "Project", new { id = Model.Epic.ProjectId }, Request.Url.Scheme)"
-                style="margin-top:20px;" class="btn btn-default">Create Epic</a>*@
+            style="margin-top:20px;" class="btn btn-default">Create Epic</a>*@
                     </div>
                 </div>
                 @*Status seçmek için DropDown/RadioBox eklenecek*@
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Backlog.BacklogStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10" style="margin-bottom:5px;">
+                        @Html.DisplayNameFor(model => model.Backlog.BacklogStatus)
+                    </div>
                     <div class="col-md-10">
                         @Html.DropDownListFor(x => Model.Backlog.BacklogStatus, new SelectList(Enum.GetValues(typeof(Status)),
                        "Text"), htmlAttributes: new { @class = "form-control", id = "BacklogStatus" })
@@ -84,8 +92,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Backlog.AcceptanceCriteria,
-                   htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10" style="margin-bottom:5px;">
+                        @Html.DisplayNameFor(model => model.Backlog.AcceptanceCriteria)
+                    </div>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Backlog.AcceptanceCriteria, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Backlog.AcceptanceCriteria, "",

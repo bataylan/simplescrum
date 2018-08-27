@@ -26,7 +26,6 @@ namespace ScrumApplication.Entity.DbContext
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Epic> Epics { get; set; }
-        //public virtual DbSet<Sprint> Sprints { get; set; }
         public virtual DbSet<ProductBacklog> ProductBacklogs { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Manager> Managers { get; set; }

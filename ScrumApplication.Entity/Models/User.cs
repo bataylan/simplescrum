@@ -36,10 +36,5 @@ namespace ScrumApplication.Entity.Models
 
         public virtual ICollection<Member> Members { get; set; }
         public virtual ICollection<Manager> Managers { get; set; }
-
-        public User()
-        {
-            Name = FirstName + " " + LastName.Substring(0, 1) + ".";
-        }
     }
 }

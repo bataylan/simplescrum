@@ -235,7 +235,12 @@
     <Compile Include="Migrations\201808101246252_MigrationFiftyThree1.Designer.cs">
       <DependentUpon>201808101246252_MigrationFiftyThree1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808161323469_MigrationFiftyFour.cs" />
+    <Compile Include="Migrations\201808161323469_MigrationFiftyFour.Designer.cs">
+      <DependentUpon>201808161323469_MigrationFiftyFour.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\BacklogViewModel.cs" />
     <Compile Include="Models\BacklogToMember.cs" />
@@ -258,6 +263,7 @@
     <Compile Include="Models\TeamCreateViewModel.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserCommunityViewModel.cs" />
+    <Compile Include="Models\UserRegisterViewModel.cs" />
     <Compile Include="Models\ViewEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -403,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808101246252_MigrationFiftyThree1.resx">
       <DependentUpon>201808101246252_MigrationFiftyThree1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808161323469_MigrationFiftyFour.resx">
+      <DependentUpon>201808161323469_MigrationFiftyFour.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,7 +14,10 @@
         font-weight: bold;
     }
 </style>
-
+<div>
+    <a href="@Url.Action("Create", "Project",
+                            Request.Url.Scheme)" class="btn btn-primary">Create Project</a>
+</div>
 <div>
     <h2 style="text-align:center; margin-bottom:20px;">Your Active Projects</h2>
 </div>
@@ -40,11 +43,11 @@
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group-sm mr-2" role="group" aria-label="First group">
                                     <a href="@Url.Action("ProjectHome", "Project", new { id = project.ProjectId },
-                                Request.Url.Scheme)" class="btn btn-sm btn-light">Project Home</a>
+                                Request.Url.Scheme)" class="btn btn-sm btn-success">Project Home</a>
                                     <a href="@Url.Action("IndexBacklog", "Project", new { projectId = project.ProjectId },
                                 Request.Url.Scheme)" class="btn btn-sm btn-primary">Backlogs</a>
                                     <a href="@Url.Action("IndexEpic", "Project", new { id = project.ProjectId },
-                                Request.Url.Scheme)" class="btn btn-sm btn-success">Epics</a>
+                                Request.Url.Scheme)" class="btn btn-sm btn-secondary">Epics</a>
                                 </div>
                             </div>
                             </td>

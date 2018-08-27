@@ -3,10 +3,10 @@
 @model IEnumerable<Project>
 
 @{
-    ViewBag.Title = "Projects";
+    ViewBag.Title = "Team Projects";
 }
 
-<h2>Projects</h2>
+<h2>Team Projects</h2>
     <p>
         <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-primary">Create Project</a>
     </p>
@@ -41,11 +41,13 @@
                         <td>
                             @if (TeamRepository.IsProjectManager(item.ProjectId))
                             {
-                                <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-danger">Edit</a>
-                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-success">Complete</a>
+                                <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-danger">Edit</a>
+                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-success">Complete</a>
                             }
                             @*<a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" class="btn btn-primary">Project Home</a>*@
-                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-secondary">Epic Tasks</a>
+                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-secondary">Epic Tasks</a>
+                            <a href="@Url.Action("IndexBacklog", "Project", new { projectId = item.ProjectId },
+                                Request.Url.Scheme)" class="btn btn-sm btn-primary">Backlogs</a>
                         </td>
                     </tr>
                 }
@@ -68,7 +70,7 @@
                         <td>
                             @if (TeamRepository.IsProjectManager(item.ProjectId))
                             {
-                                <a href="@Url.Action("GreenProject", "Project", new { id = item.ProjectId })" class="btn btn-default">Mark as Uncompleted</a>
+                                <a href="@Url.Action("GreenProject", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-outline-success">Mark as Uncompleted</a>
                             }
                         </td>
                     </tr>

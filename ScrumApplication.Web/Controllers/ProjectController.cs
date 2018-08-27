@@ -589,7 +589,7 @@ namespace ScrumApplication.Web.Controllers
                    ("uncompleted " + existBacklog.Name + " backlog.",
                    existBacklog.ProjectId, existBacklog.ProductBacklogId);
 
-                    return RedirectToAction("IndexBacklog", "Project", new { id = existBacklog.ProjectId });
+                    return RedirectToAction("IndexBacklog", "Project", new { projectId = existBacklog.ProjectId });
                 }
                 return Content("There are errors, you cannot green this backlog.");
             }
@@ -616,6 +616,45 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("Login", "User");
         }
         
+        public ActionResult EndSprint(int projectId, int sprintNo = 0, int sortBy = 0)
+        {
+            int userId = UserRepository.GetUserId();
+            var existProject = db.Projects.FirstOrDefault(x => x.ProjectId == projectId);
+
+            int teamId = existProject.TeamId ?? default(int);
+            if(TeamRepository.IsUserManagerOfTeam(userId, teamId))
+            {
+                List<ProductBacklog> existBacklogs = new List<ProductBacklog>();
+                existBacklogs = ProjectRepository.GetProjectBacklogs(projectId);
+                if (existProject.CurrentSprintNo < ProjectRepository.GetProjectSprintCount(projectId))
+                {
+                    existProject.CurrentSprintNo += 1;
+                    foreach (var backlog in existBacklogs)
+                    {
+                        if (!backlog.Done && backlog.SprintNo < existProject.CurrentSprintNo)
+                        {
+                            var _existBacklog = db.ProductBacklogs.FirstOrDefault(x => x.ProductBacklogId == backlog.ProductBacklogId);
+                            _existBacklog.SprintNo = existProject.CurrentSprintNo;
+
+                        }
+                    }
+                    db.SaveChanges();
+                }
+                else if(existProject.CurrentSprintNo == ProjectRepository.GetProjectSprintCount(projectId))
+                {
+                    return Content("There is no next sprint.");
+                }
+                
+
+
+                return RedirectToAction("IndexBacklog", new { projectId , sprintNo,  sortBy });
+            }
+            else
+            {
+                return  Content("You cannot do this operation");
+            }
+            return Content("You have no backlog for next sprint, please add backlog first");
+        }
         
     }
 }

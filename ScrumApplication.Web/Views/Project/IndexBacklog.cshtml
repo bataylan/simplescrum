@@ -26,20 +26,24 @@
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn btn-group mr-2" role="group" aria-label="First group">
                 <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId },
-                            Request.Url.Scheme)" class="btn btn-primary">Create Task</a>
-                <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-success">All Project Epics</a>
+                            Request.Url.Scheme)" class="btn btn-success">Create Backlog</a>
+                <a href="@Url.Action("EndSprint", "Project", new { projectId = Model.ProjectId, sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy},
+                            Request.Url.Scheme)" class="btn btn-danger">End Sprint</a>
+            </div>
+            <div class="btn btn-group mr-2" role="group" aria-label="First group">
+                <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-primary">All Project Epics</a>
                 <a href="@Url.Action("ProjectHome", "Project", new { id = Model.ProjectId },
                             Request.Url.Scheme)" class="btn btn-primary">Project Home</a>
             </div>
             <div class="btn btn-group mr-2" role="group" aria-label="Second group">
                 @if (Model.ViewSprintNo == 0)
                 {
-                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId },
+                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId , sortBy = Model.ViewSortBy },
                             Request.Url.Scheme)" class="btn btn-primary disabled">Sprints</a>
                 }
                 else
                 {
-                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId },
+                    <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId , sortBy = Model.ViewSortBy },
                             Request.Url.Scheme)" class="btn btn-primary">Sprints</a>
                 }
 
@@ -47,32 +51,36 @@
                 {
                     if (Model.ViewSprintNo == i)
                     {
-                        <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
-                            class="btn btn-primary disabled">@i</a>
+                        <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId , sprintNo = i , sortBy = Model.ViewSortBy },
+                            Request.Url.Scheme)"
+                           class="btn btn-primary disabled">@i</a>
                     }
                     else
                     {
                         if (i < Model.CurrentSprintNo)
                         {
-                            <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
-                                class="btn btn-secondary">@i</a>
+                            <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId , sprintNo = i , sortBy = Model.ViewSortBy },
+                            Request.Url.Scheme)"
+                               class="btn btn-secondary">@i</a>
                         }
                         else if (i == Model.CurrentSprintNo)
                         {
-                            <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
-                                class="btn btn-success">@i</a>
+                            <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId , sprintNo = i , sortBy = Model.ViewSortBy },
+                            Request.Url.Scheme)"
+                               class="btn btn-success">@i</a>
                         }
                         else
                         {
-                            <a href="~/Project/IndexBacklog?projectId=@Model.ProjectId&sprintNo=@i"
-                                class="btn btn-primary">@i</a>
+                            <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.ProjectId , sprintNo = i , sortBy = Model.ViewSortBy },
+                            Request.Url.Scheme)"
+                               class="btn btn-primary">@i</a>
                         }
                     }
                 }
             </div>
         </div>
         <div class="btn-group dropright">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Sort By
             </button>
             <div class="dropdown-menu">
@@ -164,25 +172,21 @@
                                     {
                                         <td>
                                             <button type="button" class="btn btn-brown disabled btn-sm">
-                                                You Are Assigned
+                                                <i class="fa fa-user-circle" aria-hidden="true"></i>
                                             </button>
                                         </td>
                                         <td>
                                             <div class="btn-group">
                                                 <a href="@Url.Action("EditBacklog", "Project",
                                                     new { id = backlog.ProductBacklogId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy },
-                                        Request.Url.Scheme)" class="btn btn-sm btn-danger">Edit</a>
-                                                <button type="button" class="btn btn-sm btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="sr-only">Edit Dropdown</span>
-                                                </button>
-
+                                        Request.Url.Scheme)" class="btn btn-sm btn-danger"><i class="fa fa-edit" aria-hidden="true"></i></a>
                                             </div>
                                             @*<a href="@Url.Action("EditBacklog", "Project",
                     new { id = backlog.ProductBacklogId },
         Request.Url.Scheme)" class="btn btn-sm btn-danger">Edit</a>*@
                                             <a href="@Url.Action("CompleteBacklog", "Project",
                                                     new { id = backlog.ProductBacklogId },
-                                        Request.Url.Scheme)" class="btn btn-sm btn-success">Complete</a>
+                                        Request.Url.Scheme)" class="btn btn-sm btn-success"><i class="fa fa-check" aria-hidden="true"></i></a>
                                             @*<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                         <div class="btn-group mr-2" role="group" aria-label="First group">
                                             <a href="@Url.Action("GiveIn", "Project", new { id = backlog.ProductBacklogId },

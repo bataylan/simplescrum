@@ -52,7 +52,7 @@ namespace ScrumApplication.DAL.Repositories
         public static int GetUserId()
         {
             HttpCookie cookie = HttpContext.Current.Request.Cookies.Get("UserId");
-            if(cookie.Value != null)
+            if(cookie != null)
             {
                 return Int32.Parse(cookie.Value);
             }

@@ -13,10 +13,53 @@ namespace ScrumApplication.Web.Controllers
 {
     public class UserController : Controller
     {
+        ScrumApplicationDbContext db;
+
+        public UserController()
+        {
+            db = new ScrumApplicationDbContext();
+        }
         // GET: User
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult Account()
+        {
+            var newModel = new AccountViewModel();
+            var user = UserRepository.GetUser();
+            newModel.User = user;
+
+            return View(newModel);
+        }
+
+        [HttpPost]
+        public ActionResult Account(AccountViewModel newModel)
+        {
+            var existUser = db.Users.FirstOrDefault(x => x.UserId == newModel.User.UserId);
+            if(newModel.CurrentPassword != null && newModel.NewPassword != null && newModel.ConfirmNewPassword != null)
+            {
+                if(newModel.CurrentPassword == existUser.Password)
+                {
+                    if(newModel.NewPassword == newModel.ConfirmNewPassword)
+                    {
+                        existUser.Password = newModel.NewPassword;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return Content("You entered new password and confirm new password different.");
+                    }
+                     
+                }
+                else
+                {
+                    return Content("You entered wrong current password.");
+                }
+                
+            }
+            return RedirectToAction("Account");
         }
 
         [HttpGet]
@@ -55,26 +98,36 @@ namespace ScrumApplication.Web.Controllers
 
         public ActionResult Register()
         {
-            var newUser = new User();
+            var newUser = new UserRegisterViewModel();
             return View(newUser);
         }
 
         [HttpPost]
-        public ActionResult Register(User newUser)
+        public ActionResult Register(UserRegisterViewModel newUser)
         {
             using (var db = new ScrumApplicationDbContext())
             {
-                if(db.Users.FirstOrDefault(x=>x.Mail == newUser.Mail) == null)
+                if(db.Users.FirstOrDefault(x=>x.Mail == newUser.User.Mail) == null)
                 {
-                    db.Users.Add(newUser);
-                    db.SaveChanges();
-                    
-                    FormsAuthentication.SetAuthCookie(newUser.Mail, true);
-                    UserRepository.UpdateUserCookie(newUser.UserId);
+                    if(newUser.ConfirmPassword == newUser.User.Password)
+                    {
+                        var _newUser = new User {
+                            FirstName = newUser.User.FirstName,
+                            LastName = newUser.User.LastName,
+                            Name = newUser.User.FirstName + " " + newUser.User.LastName.Substring(0, 1) + ".",
+                            Mail = newUser.User.Mail,
+                            Password = newUser.User.Password
+                        };
 
-                    return RedirectToAction("Index", "Team", new { id = UserRepository.GetUserId() });
+                        db.Users.Add(_newUser);
+                        db.SaveChanges();
+
+                        FormsAuthentication.SetAuthCookie(newUser.User.Mail, true);
+                        UserRepository.UpdateUserCookie(newUser.User.UserId);
+
+                        return RedirectToAction("Index", "Team", new { id = UserRepository.GetUserId() });
+                    }
                 }
-
             }
                 return View(newUser);
         }
@@ -87,6 +140,7 @@ namespace ScrumApplication.Web.Controllers
             {
                 HttpCookie cookie = HttpContext.Request.Cookies.Get("UserId");
                 cookie.Expires = DateTime.Now.AddDays(-1d);
+                HttpContext.Response.SetCookie(cookie);
 
             }
 

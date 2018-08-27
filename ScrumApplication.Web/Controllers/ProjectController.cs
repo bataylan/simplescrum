@@ -192,14 +192,11 @@ namespace ScrumApplication.Web.Controllers
             return RedirectToAction("EditBacklog", new { id = newComment.ProductBacklogId });
         }
 
-        public ActionResult EditBacklog(int id, int? from, int? sprintNo, int? sortBy)
+        public ActionResult EditBacklog(int id, int from = 0, int sprintNo = 0, int sortBy = 0)
         {
             var backlogModel = ProjectRepository.GetBacklogViewModel(id);
-            if(sprintNo.HasValue && sortBy.HasValue)
-            {
-                backlogModel.ViewSortBy = sortBy ?? default(int);
-                backlogModel.ViewSprintNo = sprintNo ?? default(int);
-            }
+            backlogModel.ViewSortBy = sortBy;
+            backlogModel.ViewSprintNo = sprintNo;
 
             return View(backlogModel);
         }
@@ -234,7 +231,8 @@ namespace ScrumApplication.Web.Controllers
 
             ActivityRepository.ActivityCreator
                    ("edited " + _existBacklog.Name + " backlog.", _existBacklog.ProjectId, _existBacklog.ProductBacklogId);
-            return RedirectToAction("EditBacklog", new { id = _existBacklog.ProductBacklogId });
+            return RedirectToAction("EditBacklog", new { id = _existBacklog.ProductBacklogId ,
+                sprintNo = backlogModel.ViewSprintNo , sortBy = backlogModel.ViewSortBy });
         }
 
         public ActionResult AssignBacklog(int memberId, int backlogId, int? from)
@@ -653,7 +651,6 @@ namespace ScrumApplication.Web.Controllers
             {
                 return  Content("You cannot do this operation");
             }
-            return Content("You have no backlog for next sprint, please add backlog first");
         }
         
     }

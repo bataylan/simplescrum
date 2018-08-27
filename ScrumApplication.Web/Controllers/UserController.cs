@@ -65,11 +65,14 @@ namespace ScrumApplication.Web.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            if(UserRepository.IsUserSigned())
+            {
+                int userId = UserRepository.GetUserId();
+                return RedirectToAction("Index", "Home", new { id = userId });
+            }
+
             var user = new User();
             return View(user);
-
-          
-
         }
 
         [HttpPost]
@@ -82,8 +85,8 @@ namespace ScrumApplication.Web.Controllers
                 {
                     FormsAuthentication.SetAuthCookie(existUser.Mail, true);
                     UserRepository.UpdateUserCookie(existUser.UserId);
-
-                    return RedirectToAction("Index", "Home",new { id = UserRepository.GetUserId() });
+                    int userId = UserRepository.GetUserId();
+                    return RedirectToAction("Index", "Home",new { id = userId });
                     
                 }
                 else
@@ -98,6 +101,10 @@ namespace ScrumApplication.Web.Controllers
 
         public ActionResult Register()
         {
+            if (UserRepository.IsUserSigned())
+            {
+                return Content("You are already signed in.");
+            }
             var newUser = new UserRegisterViewModel();
             return View(newUser);
         }

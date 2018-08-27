@@ -27,8 +27,12 @@
             <div class="btn btn-group mr-2" role="group" aria-label="First group">
                 <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId },
                             Request.Url.Scheme)" class="btn btn-success">Create Backlog</a>
-                <a href="@Url.Action("EndSprint", "Project", new { projectId = Model.ProjectId, sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy},
+                @if (TeamRepository.IsTeamManager(Model.TeamId))
+                {
+                    <a href="@Url.Action("EndSprint", "Project", new { projectId = Model.ProjectId, sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy},
                             Request.Url.Scheme)" class="btn btn-danger">End Sprint</a>
+                }
+
             </div>
             <div class="btn btn-group mr-2" role="group" aria-label="First group">
                 <a href="~/Project/IndexEpic/@Model.ProjectId" class="btn btn-primary">All Project Epics</a>
@@ -129,9 +133,17 @@
                             {
                                 <tr>
                                     <th scope="row">
-                                        <a href="@Url.Action("EditBacklog", "Project",
+                                        @if (TeamRepository.IsTeamManager(Model.TeamId))
+                                        {
+                                            <a href="@Url.Action("EditBacklog", "Project",
                                             new { id = backlog.ProductBacklogId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy },
                                         Request.Url.Scheme)">@backlog.Name</a>
+                                        }
+                                        else
+                                        {
+                                            @backlog.Name
+                                        }
+
                                     </th>
                                     <td>@backlog.EpicName</td>
                                     <td>

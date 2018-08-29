@@ -338,13 +338,15 @@ namespace ScrumApplication.Web.Controllers
 
         }
 
-        public ActionResult CreateBacklog(int id, int? from)
+        public ActionResult CreateBacklog(int projectId, int sprintNo = 0,int sortBy = 0)
         {
             var backlogModel = new BacklogViewModel();
-            backlogModel.Backlog.ProjectId = id;
-            backlogModel.ProjectEpics = EpicRepository.GetEpics(id);
+            backlogModel.Backlog.ProjectId = projectId;
+            backlogModel.ProjectEpics = EpicRepository.GetEpics(projectId);
             backlogModel.Epic.ProjectId = backlogModel.Backlog.ProjectId;
 
+            backlogModel.ViewSortBy = sortBy;
+            backlogModel.ViewSprintNo = sprintNo;
             return View(backlogModel);
         }
 
@@ -362,7 +364,7 @@ namespace ScrumApplication.Web.Controllers
                    ("created " + backlogModel.Backlog.Name + " backlog.",
                    backlogModel.Backlog.ProjectId, backlogModel.Backlog.ProductBacklogId);
 
-                return RedirectToAction("IndexBacklog", new { projectId = backlogModel.Backlog.ProjectId});
+                return RedirectToAction("EditBacklog", new { id = backlogModel.Backlog.ProductBacklogId, sprintNo = backlogModel.ViewSprintNo, sortBy = backlogModel.ViewSortBy });
             }
 
             return Content("Please assign a epic task first.");

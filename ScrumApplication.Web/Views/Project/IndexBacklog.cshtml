@@ -25,12 +25,12 @@
 
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn btn-group mr-2" role="group" aria-label="First group">
-                <a href="@Url.Action("CreateBacklog", "Project", new { id = Model.ProjectId },
+                <a href="@Url.Action("CreateBacklog", "Project", new { projectId = Model.ProjectId, sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy },
                             Request.Url.Scheme)" class="btn btn-success">Create Backlog</a>
                 @if (TeamRepository.IsTeamManager(Model.TeamId))
                 {
                     <a href="@Url.Action("EndSprint", "Project", new { projectId = Model.ProjectId, sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy},
-                            Request.Url.Scheme)" class="btn btn-danger">End Sprint</a>
+                            Request.Url.Scheme)" onclick="return confirm('Are you sure you want to end this sprint? This cant be undone.');" class="btn btn-danger">End Sprint</a>
                 }
 
             </div>
@@ -415,7 +415,7 @@
         Request.Url.Scheme)" class="btn btn-sm btn-danger">Edit</a>*@
                                             <a href="@Url.Action("CompleteBacklog", "Project",
                                                     new { id = backlog.ProductBacklogId },
-                                        Request.Url.Scheme)" class="btn btn-sm btn-success"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                        Request.Url.Scheme)" onclick="return confirm('Are you sure you want to complete this item?');" class="btn btn-sm btn-success"><i class="fa fa-check" aria-hidden="true"></i></a>
                                             @*<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                         <div class="btn-group mr-2" role="group" aria-label="First group">
                                             <a href="@Url.Action("GiveIn", "Project", new { id = backlog.ProductBacklogId },
@@ -462,7 +462,7 @@
                                         <td>
                                             <a href="@Url.Action("GreenBacklog", "Project",
                                                         new { id = backlog.ProductBacklogId },
-                                            Request.Url.Scheme)" class="btn btn-outline-success">Green</a>
+                                            Request.Url.Scheme)" onclick="return confirm('Are you sure you want to green this backlog?');" class="btn btn-outline-success">Green</a>
                                         </td>
                                         <td></td>
                                     }

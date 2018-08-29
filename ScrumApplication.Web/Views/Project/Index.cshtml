@@ -48,8 +48,7 @@
                         <td>
                             @if (TeamRepository.IsProjectManager(item.ProjectId))
                             {
-                                <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-danger">Edit</a>
-                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-success">Complete</a>
+                                <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" onclick="return confirm('Are you sure you want to complete this project?');" class="btn btn-sm btn-success">Complete</a>
                             }
                             @*<a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" class="btn btn-primary">Project Home</a>*@
                                 <a href="@Url.Action("IndexBacklog", "Project", new { projectId = item.ProjectId },
@@ -77,7 +76,7 @@
                         <td>
                             @if (TeamRepository.IsProjectManager(item.ProjectId))
                             {
-                                <a href="@Url.Action("GreenProject", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-outline-success">Mark as Uncompleted</a>
+                                <a href="@Url.Action("GreenProject", "Project", new { id = item.ProjectId })" onclick="return confirm('Are you sure you want to green this project?');" class="btn btn-sm btn-outline-success">Mark as Uncompleted</a>
                             }
                         </td>
                     </tr>

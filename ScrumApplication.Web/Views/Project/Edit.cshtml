@@ -91,11 +91,11 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
                 @if (!Model.Project.IsDone)
                 {
-                    <a href="@Url.Action("Complete", "Project", new { id = Model.Project.ProjectId })" class="btn btn-success">Mark as Completed</a>
+                    <a href="@Url.Action("Complete", "Project", new { id = Model.Project.ProjectId })" onclick="return confirm('Are you sure you want to complete this project?');" class="btn btn-success">Mark as Completed</a>
                 }
                 else
                 {
-                    <a href="@Url.Action("Green", "Project", new { id = Model.Project.ProjectId })" class="btn btn-success">Mark as Uncompleted</a>
+                    <a href="@Url.Action("Green", "Project", new { id = Model.Project.ProjectId })" onclick="return confirm('Are you sure you want to green this project?');" class="btn btn-success">Mark as Uncompleted</a>
                 }
             </div>
         </div>

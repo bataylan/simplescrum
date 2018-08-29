@@ -61,7 +61,7 @@
                 @if (TeamRepository.IsTeamManager(Model.TeamId))
                 {
                     <td>
-                        <a href="@Url.Action("RemoveMemberFromTeam","Team", new { memberId = user.MemberId })" class="btn-sm btn-danger">X</a>
+                        <a href="@Url.Action("RemoveMemberFromTeam","Team", new { memberId = user.MemberId })" onclick="return confirm('Are you sure you want to kick @user.Name?');" class="btn-sm btn-danger">X</a>
                     </td>
                 }
 

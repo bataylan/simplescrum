@@ -42,6 +42,7 @@ namespace ScrumApplication.DAL.Repositories
                 var existTeam = db.Teams.FirstOrDefault(x => x.TeamId == existMember.TeamId);
                 if(existMember != null && existTeam != null)
                 {
+                    
                     existTeam.Members.Remove(existMember);
                     db.Members.Remove(existMember);
                     db.SaveChanges();
@@ -318,6 +319,24 @@ namespace ScrumApplication.DAL.Repositories
             }
         }
 
+        public static int GetUserMemberIdFromTeamId(int teamId)
+        {
+            using (var db = new ScrumApplicationDbContext())
+            {
+                var existTeam = new Team();
+                existTeam = db.Teams.FirstOrDefault(x => x.TeamId == teamId);
+                int userId = UserRepository.GetUserId();
+                foreach (var member in db.Members)
+                {
+                    if (member.TeamId == existTeam.TeamId && member.UserId == userId)
+                    {
+                        return member.MemberId;
+                    }
+                }
+                return 0;
+            }
+        }
+
         public static int GetTeamIdFromProductBacklog(int taskId)
         {
             using (var db = new ScrumApplicationDbContext())
@@ -394,7 +413,7 @@ namespace ScrumApplication.DAL.Repositories
                 {
                     var existUser = new User();
                     existUser = db.Users.FirstOrDefault(x => x.UserId == member.UserId);
-                    if(existUser != null)
+                    if(existUser != null && existUser.UserId != userId)
                     {
                         userCommunity.Add(existUser);
                     }

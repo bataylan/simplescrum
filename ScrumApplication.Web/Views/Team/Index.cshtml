@@ -16,22 +16,23 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <th scope="row">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </th>
+        <tr>
+            <th scope="row">
+                @Html.DisplayFor(modelItem => item.Name)
                 @if (TeamRepository.IsTeamManager(item.TeamId))
                 {
-                    <td><a href="@Url.Action("Edit", "Team", new { id = item.TeamId })" 
-                           class="btn btn-danger">Edit</a></td>
-                }
-                else
-                {
-                    <td></td>
-                }
-                <td><a href="@Url.Action("Select", "Team", new { id = item.TeamId })" 
-                       class="btn btn-success">Team Projects</a></td>
+                    
+                    <a href="@Url.Action("Edit", "Team", new { id = item.TeamId })"
+                        style="margin-left:10px;"><i class="fa fa-edit" aria-hidden="true"></i></a>
 
+                }
+            </th>
+            <td>
+                <a href="@Url.Action("Select", "Team", new { id = item.TeamId })"
+                   class="btn btn-sm btn-primary">Projects</a>
+                <a href="@Url.Action("QuitFromTeam", "Team", new { teamId = item.TeamId })" onclick="return confirm('Are you sure you want to quit from  this team?');"
+                   class="btn btn-sm btn-secondary">Quit</a>
+            </td>
             </tr>
         }
     </tbody>

@@ -48,7 +48,7 @@ namespace ScrumApplication.Web.Controllers
         [HttpPost]
         public ActionResult Create(ProjectEditViewModel existProjectModel)
         {
-            if (UserRepository.IsUserSigned())
+            if (UserRepository.IsUserSigned() && TeamRepository.IsTeamManager(existProjectModel.Project.TeamId ?? default(int)))
             {
                 //Define project informations
                 var newProject = new Project();
@@ -94,19 +94,24 @@ namespace ScrumApplication.Web.Controllers
 
         public ActionResult Edit(int id, int? from)
         {
+            
             var existProjectModel = new ProjectEditViewModel();
             existProjectModel.Project = db.Projects.FirstOrDefault(x => x.ProjectId == id);
+            if (TeamRepository.IsProjectManager(existProjectModel.Project.ProjectId))
+            {
+                int userId = UserRepository.GetUserId();
 
-            int userId = UserRepository.GetUserId();
+                var userCommunityTeams = TeamRepository.GetTeamsForManager(userId);
+                existProjectModel.UserTeams = userCommunityTeams;
+                existProjectModel.UserTeams = existProjectModel.UserTeams
+                        .GroupBy(x => x.TeamId)
+                        .Select(x => x.First())
+                        .ToList();
 
-            var userCommunityTeams = TeamRepository.GetTeamsForManager(userId);
-            existProjectModel.UserTeams = userCommunityTeams;
-            existProjectModel.UserTeams = existProjectModel.UserTeams
-                    .GroupBy(x => x.TeamId)
-                    .Select(x => x.First())
-                    .ToList();
+                return View(existProjectModel);
+            }
 
-            return View(existProjectModel);
+            return Content("You are not team manager, you cannot do this operation.");
         }
 
         [HttpPost]
@@ -235,6 +240,13 @@ namespace ScrumApplication.Web.Controllers
                 sprintNo = backlogModel.ViewSprintNo , sortBy = backlogModel.ViewSortBy });
         }
 
+        public ActionResult ChangeStatus(int backlogId, int status, int sprintNo = 0, int sortBy = 0)
+        {
+            var existBacklog = db.ProductBacklogs.FirstOrDefault(x => x.ProductBacklogId == backlogId);
+            existBacklog.BacklogStatus = (Status)status;
+            db.SaveChanges();
+            return RedirectToAction("IndexBacklog", new {projectId = existBacklog.ProjectId, sprintNo, sortBy, status});
+        }
         public ActionResult AssignBacklog(int memberId, int backlogId, int? from)
         {
             if(UserRepository.IsUserSigned())
@@ -350,7 +362,7 @@ namespace ScrumApplication.Web.Controllers
                    ("created " + backlogModel.Backlog.Name + " backlog.",
                    backlogModel.Backlog.ProjectId, backlogModel.Backlog.ProductBacklogId);
 
-                return RedirectToAction("IndexBacklog", new { id = backlogModel.Backlog.ProjectId});
+                return RedirectToAction("IndexBacklog", new { projectId = backlogModel.Backlog.ProjectId});
             }
 
             return Content("Please assign a epic task first.");

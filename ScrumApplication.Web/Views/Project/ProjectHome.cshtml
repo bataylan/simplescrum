@@ -8,7 +8,10 @@
 <h2>Project Home</h2>
 <div class="btn-toolbar" style="margin-top:20px; margin-bottom:30px;" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group mr-2" role="group" aria-label="First group">
-        <a href="@Url.Action("Edit", "Project", new { id = Model.Project.ProjectId }, Request.Url.Scheme)" class="btn btn-danger">Edit</a>
+        @if (TeamRepository.IsProjectManager(Model.Project.ProjectId))
+        {
+            <a href="@Url.Action("Edit", "Project", new { id = Model.Project.ProjectId }, Request.Url.Scheme)" class="btn btn-danger">Edit</a>
+        }
         <a href="~/Project/IndexEpic/@Model.Project.ProjectId" class="btn btn-primary">All Project Epics</a>
         <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.Project.ProjectId }, Request.Url.Scheme)" class="btn btn-primary">Backlogs</a>
 

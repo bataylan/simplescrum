@@ -276,6 +276,14 @@ namespace ScrumApplication.DAL.Repositories
                             select comment;
 
                 backlogModel.BacklogComments = cquery.ToList();
+                if(IsUserAssigned(backlogModel.Backlog.ProductBacklogId, null) == 1)
+                {
+                    backlogModel.IsUserAssigned = true;
+                }
+                else
+                {
+                    backlogModel.IsUserAssigned = false;
+                }
                 return backlogModel;
             }
         }
@@ -284,7 +292,7 @@ namespace ScrumApplication.DAL.Repositories
         {
             using (var db = new ScrumApplicationDbContext())
             {
-                if(IsUserAssigned(backlogId, memberId))
+                if(IsUserAssigned(backlogId, memberId) == 1)
                 {
                     var existBTM = db.BacklogToMembers.FirstOrDefault(x => x.MemberId == memberId && x.ProductBacklogId == backlogId);
                     if(existBTM != null)
@@ -302,7 +310,7 @@ namespace ScrumApplication.DAL.Repositories
             }
         }
         //Check is user assigned to selected backlog, return bool 
-        public static bool IsUserAssigned(int backlogId, int? memberId)
+        public static int IsUserAssigned(int backlogId, int? memberId)
         {
             using (var db = new ScrumApplicationDbContext())
             {
@@ -311,15 +319,21 @@ namespace ScrumApplication.DAL.Repositories
                 {
                     memberId = TeamRepository.GetUserMemberIdFromProjectId(existBacklog.ProjectId);
                 }
-                if(memberId != 0 && existBacklog != null)
+                if (memberId != 0 && existBacklog != null)
                 {
                     var existBTM = db.BacklogToMembers.FirstOrDefault(x => x.MemberId == memberId && x.ProductBacklogId == backlogId);
-                    if(existBTM != null)
+                    if (existBTM != null)
                     {
-                        return true;
+                        return 1;
                     }
+                    var _existBTM = db.BacklogToMembers.FirstOrDefault(x => x.ProductBacklogId == existBacklog.ProductBacklogId);
+                    if (_existBTM != null && _existBTM.MemberId != memberId)
+                    {
+                        return 2;
+                    }
+
                 }
-                return false;
+                return 0;
             }
         }
 
@@ -336,7 +350,7 @@ namespace ScrumApplication.DAL.Repositories
                 var existMember = db.Members.FirstOrDefault(x => x.MemberId == memberId);
                 if (existMember != null)
                 {
-                    if (ProjectRepository.IsUserAssigned(backlogId, existMember.MemberId))
+                    if (ProjectRepository.IsUserAssigned(backlogId, existMember.MemberId) == 1)
                     {
                         if(existTask.BacklogStatus < Status.Completed)
                         {
@@ -391,7 +405,7 @@ namespace ScrumApplication.DAL.Repositories
                             var projectBacklogs = GetProjectBacklogs(project.ProjectId);
                             foreach(var backlog in projectBacklogs)
                             {
-                                if (!backlog.Done && IsUserAssigned(backlog.ProductBacklogId, memberId) && backlog.SprintNo==project.CurrentSprintNo)
+                                if (!backlog.Done && IsUserAssigned(backlog.ProductBacklogId, memberId) == 1 && backlog.SprintNo==project.CurrentSprintNo)
                                 {
                                     var btm = db.BacklogToMembers.FirstOrDefault
                                         (x => x.MemberId == memberId && x.ProductBacklogId == backlog.ProductBacklogId);

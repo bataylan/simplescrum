@@ -7,9 +7,12 @@
 }
 
 <h2>Team Projects</h2>
-    <p>
+<p>
+    @if (TeamRepository.IsProjectManager(Model.FirstOrDefault().ProjectId))
+    {
         <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-primary">Create Project</a>
-    </p>
+    }
+</p>
 
 
 @if (Model.FirstOrDefault().Name != null)
@@ -30,9 +33,13 @@
                 {
                     <tr>
                         <th scope="row">
-                            <a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" >@item.Name</a>
+                            <a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })">@item.Name</a>
+                            @if (TeamRepository.IsProjectManager(item.ProjectId))
+                            {
+                                <a href="@Url.Action("Edit", "Project", new { id = item.ProjectId })" style="margin-left:10px;"><i class="fa fa-edit" aria-hidden="true"></i></a>
 
-                            
+                            }
+
                         </th>
                         <td>
                             @item.EndDate.Day.@item.EndDate.Month.@item.EndDate.Year
@@ -45,9 +52,9 @@
                                 <a href="@Url.Action("Complete", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-success">Complete</a>
                             }
                             @*<a href="@Url.Action("ProjectHome", "Project", new { id = item.ProjectId })" class="btn btn-primary">Project Home</a>*@
-                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-secondary">Epic Tasks</a>
-                            <a href="@Url.Action("IndexBacklog", "Project", new { projectId = item.ProjectId },
+                                <a href="@Url.Action("IndexBacklog", "Project", new { projectId = item.ProjectId },
                                 Request.Url.Scheme)" class="btn btn-sm btn-primary">Backlogs</a>
+                            <a href="@Url.Action("IndexEpic", "Project", new { id = item.ProjectId })" class="btn btn-sm btn-secondary">Epics</a>
                         </td>
                     </tr>
                 }

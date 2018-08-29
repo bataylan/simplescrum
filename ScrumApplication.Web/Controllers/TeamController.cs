@@ -216,5 +216,18 @@ namespace ScrumApplication.Web.Controllers
 
             return RedirectToAction("Login", "User");
         }
+
+        public ActionResult QuitFromTeam(int teamId)
+        {
+            var memberId = TeamRepository.GetUserMemberIdFromTeamId(teamId);
+            var isDone = TeamRepository.RemoveMemberFromTeam(memberId);
+
+            if(isDone)
+            {
+                return RedirectToAction("Index", "Team");
+            }
+
+            return Content("You cannot quit from this team.");
+        }
     }
 }

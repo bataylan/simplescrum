@@ -103,31 +103,35 @@
                    new { @class = "text-danger" })
                 </div>
             </div>
-            @if (Model.UnAssignedMembers.Count != 0)
+            @if (TeamRepository.IsProjectManager(Model.Backlog.ProjectId))
             {
-                <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
-                    <p><span>Assign Members:</span></p>
-                    @foreach (var unasmember in Model.UnAssignedMembers)
-                    {
-                        <div class="col-md-4 col-sm-8">
-                            <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="First group">
-                                    <button class="btn btn-secondary disabled">@unasmember.Name</button>
-                                    <a href="@Url.Action("AssignBacklog","Project",
+                if (Model.UnAssignedMembers.Count != 0)
+                {
+                    <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
+                        <p><span>Assign Members:</span></p>
+                        @foreach (var unasmember in Model.UnAssignedMembers)
+                        {
+                            <div class="col-md-4 col-sm-8">
+                                <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                        <button class="btn btn-secondary disabled">@unasmember.Name</button>
+                                        <a href="@Url.Action("AssignBacklog","Project",
                                             new { memberId = unasmember.MemberId ,backlogId = Model.Backlog.ProductBacklogId },
                                             Request.Url.Scheme)" class="btn btn-secondary">+</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-12 col-sm-12" style="margin-top:30px; margin-bottom:30px;">
+                        <span>All Team Members assigned to task.</span>
+                    </div>
+                }
             }
-            else
-            {
-                <div class="col-md-12 col-sm-12" style="margin-top:30px; margin-bottom:30px;">
-                    <span>All Team Members assigned to task.</span>
-                </div>
-            }
+
             <div class="col-md-12 col-sm-12" style="margin-bottom:30px;">
                 @if (Model.AssignedMembers.Count != 0)
                 {
@@ -138,9 +142,12 @@
                             <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="First group">
                                     <button class="btn btn-primary disabled">@asmember.Name</button>
-                                    <a href="@Url.Action("UnAssignUserFromEditBacklog","Project",
+                                    @if (TeamRepository.IsProjectManager(Model.Backlog.ProjectId))
+                                    {
+                                        <a href="@Url.Action("UnAssignUserFromEditBacklog","Project",
                                                 new { backlogId = Model.Backlog.ProductBacklogId, memberId = asmember.MemberId }
                                                 , Request.Url.Scheme)" class="btn btn-primary">X</a>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -161,9 +168,12 @@
             <div class="col-md-offset-2 col-md-10">
                 <div class="btn-toolbar btn-sm" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group mr-2" role="group" aria-label="First group">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                        <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.Backlog.ProjectId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy }, Request.Url.Scheme)" class="btn btn-primary">Back To List</a>
+                        @if (Model.IsUserAssigned || TeamRepository.IsProjectManager(Model.Backlog.ProjectId))
+                        {
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        }
                         <a href="@Url.Action("CommentBacklog","Project", new { backlogId = Model.Backlog.ProductBacklogId }, Request.Url.Scheme)" class="btn btn-primary">Add Comment</a>
+                        <a href="@Url.Action("IndexBacklog", "Project", new { projectId = Model.Backlog.ProjectId , sprintNo = Model.ViewSprintNo , sortBy = Model.ViewSortBy }, Request.Url.Scheme)" class="btn btn-primary">Back To List</a>
                     </div>
                 </div>
                 @*<input type="submit" value="Save" class="btn btn-primary" />*@

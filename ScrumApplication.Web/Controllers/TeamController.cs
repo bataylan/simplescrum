@@ -20,10 +20,17 @@ namespace ScrumApplication.Web.Controllers
         // GET: Team
         public ActionResult Index()
         {
-            var usersTeams = new List<Team>();
-            usersTeams = TeamRepository.GetTeams(UserRepository.GetUserId());
+            if(UserRepository.IsUserSigned())
+            {
+                var usersTeams = new List<Team>();
+                usersTeams = TeamRepository.GetTeams(UserRepository.GetUserId());
 
-            return View(usersTeams);
+                return View(usersTeams);
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
         }
 
         public ActionResult Select(int id)

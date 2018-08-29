@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index","Team")">Teams</a>
                 </li>
+
+            </ul>
+            <ul class="navbar-nav" style="float:right!important">
                 @if (UserRepository.IsUserSigned())
                 {
                     <a class="nav-link" href="@Url.Action("Account","User")">Account</a>
@@ -42,6 +45,7 @@
                     @*<li class="nav-item">@Html.ActionLink("Sign In", "Login", "User")</li>*@
                 }
             </ul>
+            
         </div>
     </nav>
     

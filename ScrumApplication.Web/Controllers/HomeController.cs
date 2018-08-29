@@ -19,28 +19,19 @@ namespace ScrumApplication.Web.Controllers
 
         public ActionResult Index()
         {
-            int userId = 0;
-            userId = UserRepository.GetUserId();
-            var userProjects = ProjectRepository.GetUserProjects(userId);
-            //var homeVM = ProjectRepository.PrepareHomeViewModel(userId);
-            //var userTeams = new List<Team>();
-            //userTeams = TeamRepository.GetTeams(userId);
-            //var teamProjects = new List<Project>();
-            //var userActiveProjects = new List<Project>();
-            //foreach(var team in userTeams)
-            //{
-            //    teamProjects = ProjectRepository.GetProjects(team.TeamId);
-            //    foreach (var project in teamProjects)
-            //    {
-            //        if(!project.IsDone)
-            //        {
-            //            userActiveProjects.Add(project);
-            //        }
-            //    }
-            //}
-            //userActiveProjects = userActiveProjects.OrderBy(x => x.CreatedDate).ToList();
+            if(UserRepository.IsUserSigned())
+            {
+                int userId = 0;
+                userId = UserRepository.GetUserId();
+                var userProjects = ProjectRepository.GetUserProjects(userId);
+
+                return View(userProjects);
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
             
-            return View(userProjects);
         }
 
         public ActionResult GoSprint(int id)

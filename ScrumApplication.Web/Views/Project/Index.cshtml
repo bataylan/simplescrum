@@ -8,10 +8,7 @@
 
 <h2>Team Projects</h2>
 <p>
-    @if (TeamRepository.IsProjectManager(Model.FirstOrDefault().ProjectId))
-    {
-        <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-primary">Create Project</a>
-    }
+     <a href="@Url.Action("Create", "Project", new { teamId = Model.FirstOrDefault().TeamId })" class="btn btn-primary">Create Project</a>
 </p>
 
 
